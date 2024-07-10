@@ -10,11 +10,11 @@ services:
     # volumes:
     #   - website:/var/www/html
     networks:
-      - inception
+      - trscd
   django:
     container_name: django
     env_file: .env
-    build: .
+    build: ./django
     restart: on-failure
     ports:
       - "8000:8000"
@@ -23,7 +23,7 @@ services:
     # volumes:
     #   - website:/var/www/html
     networks:
-      - inception
+      - trscd
 # volumes:
 #   website:
 #     driver: local
@@ -31,5 +31,5 @@ services:
 #       type: 'none'
 #       o: 'bind'
 networks:
-  inception:
+  trscd:
     driver: bridge

@@ -9,7 +9,7 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt --break-system-packages
 
 WORKDIR /django
-COPY django /django
+COPY . /django
 
 # make database migrations to silence error
 RUN python manage.py migrate
