@@ -9,16 +9,37 @@
 </head>
 <body>
 
-    {% if page == 1 %}
+    {% if page == "homepage" %}
     
-        <h1 id="main-title">PONG GAME</h1>
-        <form method="get">
-            <input id="play-button" type="submit" value="PLAY" name="play">
-        </form>
+    <h1 id="main-title">PONG GAME</h1>
 
-    {% else %}
+        {% if user.is_authenticated %}
+
+            <p id="connection">{{ user.username }}</p>
+        
+            <form method="get">
+                <input id="play-button" type="submit" value="PLAY" name="play">
+            </form>
+
+        {% else %}
+
+            <p id="connection"><a href="{% url 'userprofiles:login' %}">log in</a> | <a href="{% url 'userprofiles:register' %}">sign up</a></p>
+        
+            <input id="play-button-off" type="submit" value="PLAY">
+
+        {% endif %}
+
+    {% elif page == "modeSelection" %}
 
         {% include "./selection.html" %}
+
+    {% elif page == "login" %}
+
+        {% include "./login.html" %}
+
+    {% elif page == "register" %}
+
+        {% include "./register.html" %}
 
     {% endif %}
 

@@ -11,8 +11,9 @@
 html, body {
     margin: 0;
 }
-
+  
 body {
+    color: white;
     font-family: 'Montserrat', Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -20,11 +21,17 @@ body {
     align-items: center;  
     background: #000;
 }
-  
+
+#connection {
+    position: absolute;
+    top: 0; left: 1rem;
+    font-size: 2rem;
+    letter-spacing: 0.2cap;
+}
+
 #main-title {
     font-size: 13rem;
     font-weight: 200;
-    color: #fff;
     padding: 9rem;
     text-transform: uppercase;
     animation: flicker 3s infinite alternate;   
@@ -47,7 +54,7 @@ body {
 #play-button {
     font-size: 5rem;
     font-weight: 100;
-    color: #fff;
+    color: white;
     padding: 1rem;
     border: 0.4rem solid #fff;
     border-radius: 2rem;
@@ -58,7 +65,17 @@ body {
 #play-button:hover{
     cursor: pointer;
 }
-  
+
+#play-button-off {
+    font-size: 5rem;
+    font-weight: 100;
+    color: rgb(61, 61, 61);
+    padding: 1rem;
+    border: 0.4rem solid rgb(61, 61, 61);
+    border-radius: 2rem;
+    background-color: black;
+}
+
 @keyframes flicker {
     
     0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
@@ -78,7 +95,7 @@ body {
         text-shadow: none;
     }    
 }
-  
+
 @keyframes flicker2 {
     
     0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
@@ -108,7 +125,7 @@ body {
     }    
 }
 
-/*      SELECTION PAGE       */
+/*      selection page        */
 
 .mode-selection-buttons {
     font-size: 5rem;
@@ -116,13 +133,14 @@ body {
     color: #fff;
     padding: 1rem;
     text-transform: uppercase;
-    text-shadow: -0.2rem -0.2rem 1rem #fff, 0.2rem 0.2rem 1rem #fff, 0 0 2rem var(--neon-text-color),
-            0 0 2rem var(--neon-text-color),
-            0 0 4rem var(--neon-text-color),
-            0 0 4rem var(--neon-text-color),
-            0 0 4rem var(--neon-text-color);
-    border: 0.4rem solid transparent;
-}
+        
+        text-shadow: -0.2rem -0.2rem 1rem #fff, 0.2rem 0.2rem 1rem #fff, 0 0 2rem var(--neon-text-color),
+                0 0 2rem var(--neon-text-color),
+                0 0 4rem var(--neon-text-color),
+                0 0 4rem var(--neon-text-color),
+                0 0 4rem var(--neon-text-color);
+        border: 0.4rem solid transparent;
+    }
     
 .mode-selection-buttons:hover{
     cursor: pointer;
