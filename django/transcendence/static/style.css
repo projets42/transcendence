@@ -29,6 +29,15 @@ body {
     letter-spacing: 0.2cap;
 }
 
+#connection a{
+    text-decoration: none;
+    color: white;
+}
+
+#connection a:hover{
+    text-decoration: underline;
+}
+
 #main-title {
     font-size: 13rem;
     font-weight: 200;

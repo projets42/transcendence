@@ -26,8 +26,17 @@ def register_user(request):
 
         if form.is_valid():
             form.save()
-            return redirect("index")
+            messages.info(request, "Account created")
     else:
         form = UserCreationForm()
 
     return render(request, "index.html", {"page": "register", "form": form})
+
+
+def logout_user(request):
+    logout(request)
+    return redirect("index")
+
+
+def show_profile(request):
+    return render(request, "index.html", {"page": "profile"})

@@ -1,0 +1,23 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'form_style.css' %}">
+
+<p id="back"><a href="{% url 'index' %}"><< back</a></p>
+
+{% if messages %}
+
+	{% for message in messages %}
+		<p id="validation_message">{{ message }}</p>
+	{% endfor %}
+
+	<p><a href="{% url 'userprofiles:login' %}"><b>Go to log in >></b></a></p>
+
+{% else %}
+
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="sign up">
+	</form>
+
+{% endif %}

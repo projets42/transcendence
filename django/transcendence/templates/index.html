@@ -15,7 +15,7 @@
 
         {% if user.is_authenticated %}
 
-            <p id="connection">{{ user.username }}</p>
+            <p id="connection"><a href="{% url 'userprofiles:profile' %}">{{ user.username }}</a></p>
         
             <form method="get">
                 <input id="play-button" type="submit" value="PLAY" name="play">
@@ -40,6 +40,10 @@
     {% elif page == "register" %}
 
         {% include "./register.html" %}
+
+    {% elif page == "profile" %}
+    
+        {% include "./profile.html" %}
 
     {% endif %}
 

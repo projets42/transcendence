@@ -1,0 +1,15 @@
+<style>
+
+    p{
+        font-size: 2rem;
+    }
+
+</style>
+
+<p>{{ user.username }}</p>
+<p>
+    Pong games played : 0<br>
+    Victory in pong game : 0<br>
+    Defeat in pong game : 0<br>
+</p>
+<p><a href="{% url 'userprofiles:logout' %}">log out</a></p>
