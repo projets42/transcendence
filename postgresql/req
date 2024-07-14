@@ -1,0 +1,6 @@
+CREATE DATABASE transcendence_db;
+CREATE USER sam WITH PASSWORD 'pass';
+ALTER ROLE sam SET client_encoding TO 'utf8';
+ALTER ROLE sam SET default_transaction_isolation TO 'read committed';
+ALTER ROLE sam SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE transcendence_db TO sam;

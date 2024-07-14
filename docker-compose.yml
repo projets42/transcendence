@@ -1,4 +1,17 @@
 services:
+  postgresql:
+    container_name: postgre
+    build: ./postgresql
+    restart: always
+    env_file: .env
+    # expose:
+    #   - "5432"
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - voldb:/var/lib/postgresql/data
+    networks:
+      - trscd
   nginx:
     container_name: ngx
     build: ./nginx
@@ -15,7 +28,7 @@ services:
     container_name: django
     env_file: .env
     build: ./django
-    restart: on-failure
+    restart: always
     depends_on:
       - postgresql
     ports:
@@ -26,23 +39,13 @@ services:
     #   - website:/var/www/html
     networks:
       - trscd
-  postgresql:
-    container_name: postgre
-    build: ./postgresql
-    restart: on-failure
-    env_file: .env
-    expose:
-      - "5432"
-    # volumes:
-    #   - database:/var/lib/postgresql/data
-    networks:
-      - trscd
 # volumes:
-#   database:
+#   voldb:
 #     driver: local
 #     driver_opts:
 #       type: 'none'
 #       o: 'bind'
+#       device: '/home/smalloir/data'
 networks:
   trscd:
     driver: bridge
