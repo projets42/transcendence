@@ -2,6 +2,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .forms import UserForm
+from .models import ProfileImg
+
+def register_user(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            usr = form.save()
+            img = ProfileImg(user=usr, picture=form.cleaned_data.get('picture'))
+            img.save()
+            messages.info(request, "Account created")
+    else:
+        form = UserForm()
+
+    return render(request, "index.html", {"page": "register", "form": form})
 
 
 def login_user(request):
@@ -18,19 +33,6 @@ def login_user(request):
 
     form = AuthenticationForm()
     return render(request, "index.html", {"page": "login", "form": form})
-
-
-def register_user(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            messages.info(request, "Account created")
-    else:
-        form = UserCreationForm()
-
-    return render(request, "index.html", {"page": "register", "form": form})
 
 
 def logout_user(request):
