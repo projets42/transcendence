@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'form_style.css' %}">
+
 <style>
 
     p{
@@ -7,8 +11,10 @@
 
 </style>
 
+<p id="back"><a href="{% url 'index' %}"><< back</a></p>
+
 <p>
-    <img src="{{ user.profileimg.picture.url }}" width="100" style="border-radius: 50%"><br>
+    <img src="{{ user.profileimg.picture.url }}" width="100" height="100" style="border-radius:50%"><br>
     {{ user.username }}
 </p>
 <p>
@@ -16,4 +22,5 @@
     Victory in pong game : 0<br>
     Defeat in pong game : 0<br>
 </p>
+<p><a href="{% url 'userprofiles:modif' %}">modify username</a></p>
 <p><a href="{% url 'userprofiles:logout' %}">log out</a></p>

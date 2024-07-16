@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import UserForm
+from .forms import UserForm, ModificationForm
 from .models import ProfileImg
 
 def register_user(request):
@@ -42,3 +42,15 @@ def logout_user(request):
 
 def show_profile(request):
     return render(request, "index.html", {"page": "profile"})
+
+
+def modify_user_infos(request):
+    if request.method == 'POST':
+        form = ModificationForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.info(request, "Profile has been modified")
+    else:
+        form = ModificationForm()
+
+    return render(request, "index.html", {"page": "modif_profile", "form": form})
