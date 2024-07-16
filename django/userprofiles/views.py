@@ -7,7 +7,7 @@ from .models import ProfileImg
 
 def register_user(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = UserForm(request.POST, request.FILES)
         if form.is_valid():
             usr = form.save()
             img = ProfileImg(user=usr, picture=form.cleaned_data.get('picture'))

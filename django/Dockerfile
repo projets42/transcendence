@@ -12,6 +12,7 @@ WORKDIR /django
 COPY . /django
 
 # make database migrations to silence error
+RUN python manage.py makemigrations
 RUN python manage.py migrate
 
 # create adim and run server
