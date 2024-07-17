@@ -1,6 +1,10 @@
 <p id="connection">
     <a href="{% url 'userprofiles:profile' %}">
-        <img src="{{ user.profileimg.picture.url }}" width="70" height="70" style="border-radius:50%"><br>
+        {% if user.profileimg.picture %}
+            <img src="{{ user.profileimg.picture.url }}" width="70" height="70" style="border-radius:50%"><br>
+        {% else %}
+            <img src="/media/images/default.png" width="70" height="70" style="border-radius:50%"><br>
+        {% endif %}
         {{ user.username }}
     </a>
 </p>

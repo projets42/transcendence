@@ -50,6 +50,21 @@
 
         {% include "./modif_profile.html" %}
 
+    {% elif page == "pong_local" %}
+
+        {% include "./userinfos.html" %}
+        {% include "./local.html" %}
+
+    {% elif page == "pong_tournament" %}
+
+        {% include "./userinfos.html" %}
+        {% include "./tournament.html" %}
+
+    {% elif page == "bomberman" %}
+
+        {% include "./userinfos.html" %}
+        {% include "./bomberman.html" %}
+
     {% endif %}
 
 </body>

@@ -1,8 +1,17 @@
+
 <style>
+
   html, body {
       height: 100%;
   }
+
+  a {
+      text-decoration: none;
+      color: white;
+  }
+
 </style>
-<h2 class="mode-selection-buttons">LOCAL</h2>
-<h2 class="mode-selection-buttons">Tournament</h2>
-<h2 class="mode-selection-buttons">Bomberman</h2>
+
+<h2 class="mode-selection-buttons"><a href="{% url 'pong:play_local' %}">LOCAL</a></h2>
+<h2 class="mode-selection-buttons"><a href="{% url 'pong:play_tournament' %}">Tournament</a></h2>
+<h2 class="mode-selection-buttons"><a href="{% url 'bomberman:play' %}">Bomberman</a></h2>
