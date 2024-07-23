@@ -229,6 +229,8 @@ export default class Bomberman
                 this.direction = this.nextDirection;
             this.keys.right = false;
         }
+        else
+            return ;
 
         if (keys == 2)
             this.nextDirection = null;
@@ -243,6 +245,9 @@ export default class Bomberman
             this.timer = null;
             return ;
         }
+
+        if (this.timer == null)
+            this.timer = this.defaultTimer;
 
         let dir = this.direction;
         if (this.nextDirection)
@@ -271,9 +276,6 @@ export default class Bomberman
                 this.y = this.#align(this.y);
                 break ;
         }
-
-        if (this.timer == null)
-            this.timer = this.defaultTimer;
     }
 
     #align(pos)
