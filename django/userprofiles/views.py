@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, ModificationForm
 from .models import ProfileImg
+from django.contrib.auth.decorators import login_required
 
 def register_user(request):
     if request.method == 'POST':
@@ -40,10 +41,12 @@ def logout_user(request):
     return redirect("index")
 
 
+@login_required
 def show_profile(request):
     return render(request, "index.html", {"page": "profile"})
 
 
+@login_required
 def modify_user_infos(request):
     if request.method == 'POST':
         form = ModificationForm(request.POST, request.FILES, instance=request.user)
