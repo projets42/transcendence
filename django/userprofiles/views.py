@@ -5,6 +5,8 @@ from django.contrib import messages
 from .forms import UserForm, ModificationForm
 from .models import ProfileImg
 from django.contrib.auth.decorators import login_required
+from bomberman.models import Bomberman
+from django.db.models import Q
 
 def register_user(request):
     if request.method == 'POST':
@@ -43,7 +45,12 @@ def logout_user(request):
 
 @login_required
 def show_profile(request):
-    return render(request, "index.html", {"page": "profile"})
+    username = request.user.username
+    games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username)).count()
+    victories = Bomberman.objects.all().filter(winner = username, winner_score = 1).count()
+    defeats = Bomberman.objects.all().filter(loser = username, winner_score = 1).count()
+    draw = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0).count()
+    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "draw": draw})
 
 
 @login_required

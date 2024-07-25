@@ -23,9 +23,15 @@
 </p>
 
 <p>
-    Pong games played : 0<br>
-    Victory in pong game : 0<br>
-    Defeat in pong game : 0<br>
+    Bomberman games played : {{ games }}<br>
+    Victories in Bomberman game : {{ victories }}<br>
+    Defeats in Bomberman game : {{ defeats }}<br>
+    Draws in Bomberman game : {{ draw }}<br>
+    <br>
+    Pong games played : {{ games }}<br>
+    Victories in pong game : {{ victories }}<br>
+    Defeats in pong game : {{ defeats }}<br>
 </p>
+
 <p><a href="{% url 'userprofiles:modif' %}">modify username</a></p>
 <p><a href="{% url 'userprofiles:logout' %}">log out</a></p>
