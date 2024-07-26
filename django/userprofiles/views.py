@@ -49,8 +49,8 @@ def show_profile(request):
     games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username)).count()
     victories = Bomberman.objects.all().filter(winner = username, winner_score = 1).count()
     defeats = Bomberman.objects.all().filter(loser = username, winner_score = 1).count()
-    draw = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0).count()
-    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "draw": draw})
+    draws = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0).count()
+    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "draws": draws})
 
 
 @login_required
@@ -64,3 +64,31 @@ def modify_user_infos(request):
         form = ModificationForm()
 
     return render(request, "index.html", {"page": "modif_profile", "form": form})
+
+
+@login_required
+def bbm_games(request):
+    username = request.user.username
+    games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username))
+    return render(request, "index.html", {"page": "bbm_games", "game_name": "Bomberman", "title": "history", "games": games})
+
+
+@login_required
+def bbm_victories(request):
+    username = request.user.username
+    games = Bomberman.objects.all().filter(winner = username, winner_score = 1)
+    return render(request, "index.html", {"page": "bbm_games", "game_name": "Bomberman", "title": "victories", "games": games})
+
+
+@login_required
+def bbm_defeats(request):
+    username = request.user.username
+    games = Bomberman.objects.all().filter(loser = username, winner_score = 1)
+    return render(request, "index.html", {"page": "bbm_games", "game_name": "Bomberman", "title": "defeats", "games": games})
+
+
+@login_required
+def bbm_draws(request):
+    username = request.user.username
+    games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0)
+    return render(request, "index.html", {"page": "bbm_games", "game_name": "Bomberman", "title": "draws", "games": games})

@@ -23,10 +23,10 @@
 </p>
 
 <p>
-    Bomberman games played : {{ games }}<br>
-    Victories in Bomberman game : {{ victories }}<br>
-    Defeats in Bomberman game : {{ defeats }}<br>
-    Draws in Bomberman game : {{ draw }}<br>
+    <a href="{% url 'userprofiles:bbm_games' %}">Bomberman games played : {{ games }}</a><br>
+    <a href="{% url 'userprofiles:bbm_victories' %}">Victories in Bomberman game : {{ victories }}</a><br>
+    <a href="{% url 'userprofiles:bbm_defeats' %}">Defeats in Bomberman game : {{ defeats }}</a><br>
+    <a href="{% url 'userprofiles:bbm_draws' %}">Draws in Bomberman game : {{ draws }}</a><br>
     <br>
     Pong games played : {{ games }}<br>
     Victories in pong game : {{ victories }}<br>
