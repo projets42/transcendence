@@ -7,4 +7,4 @@ class BombermanAdmin(admin.ModelAdmin):
 
 @admin.register(BombermanTournament)
 class BombermanTournamentAdmin(admin.ModelAdmin):
-	list_display = ('tournament', 'player1', 'player2', 'winner')
+	list_display = ('creator', 'player1', 'player2', 'winner')

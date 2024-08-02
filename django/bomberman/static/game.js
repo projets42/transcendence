@@ -21,7 +21,7 @@ let player2 = new Bomberman(13 * tileSize, 13 * tileSize, tileSize, velocity, ti
 players.push(player1);
 players.push(player2);
 
-setInterval(gameLoop, 1000 / 60);
+const runGame = setInterval(gameLoop, 1000 / 60);
 
 function gameLoop()
 {
@@ -61,6 +61,12 @@ function gameEnd(n)
             players[i].bombs[j] = null;
     }
 
+    let winner = "none";
+    if (p == 1)
+        winner = "player1";
+    if (p == 2)
+        winner = "player2";
+
     let text = "Player " + p + " wins";
     if (n == 0)
         text = "Game Over";
@@ -68,5 +74,13 @@ function gameEnd(n)
     ctx.fillStyle = "black";
     ctx.font = "75px comic sans";
     ctx.fillText(text, canvas.width / 4, canvas.height / 2);
+
+    clearInterval(runGame);
+
+    setTimeout(() => {
+        document.getElementById("winner").value = winner;
+        document.getElementById("result").click();
+    }, 3000);
+    
     return true;
 }
