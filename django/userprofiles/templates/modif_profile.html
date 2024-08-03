@@ -2,7 +2,23 @@
 
 <link rel="stylesheet" href="{% static 'form_style.css' %}">
 
-<p id="back"><a href="{% url 'userprofiles:profile' %}"><< back</a></p>
+<style>
+
+    #backButton{
+        position: absolute;
+        top: 2rem;
+        left: 1rem;
+        font-size: 2rem;
+        color: white;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+</style>
+
+<button id="backButton" onclick="history.back()"><< back</button>
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %} 

@@ -9,9 +9,21 @@
         font-size: 2rem;
     }
 
+    #backButton{
+        position: absolute;
+        top: 2rem;
+        left: 1rem;
+        font-size: 2rem;
+        color: white;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
 </style>
 
-<p id="back"><a href="{% url 'index' %}"><< back</a></p>
+<button id="backButton" onclick="history.back()"><< back</button>
 
 <p>
     {% if user.profileimg.picture %}
@@ -23,14 +35,14 @@
 </p>
 
 <p>
-    <a href="{% url 'userprofiles:bbm_games' %}">Bomberman games played : {{ games }}</a><br>
-    <a href="{% url 'userprofiles:bbm_victories' %}">Victories in Bomberman game : {{ victories }}</a><br>
-    <a href="{% url 'userprofiles:bbm_defeats' %}">Defeats in Bomberman game : {{ defeats }}</a><br>
-    <a href="{% url 'userprofiles:bbm_draws' %}">Draws in Bomberman game : {{ draws }}</a><br>
+    <a href="{% url 'userprofiles:bbm_games' %}">Bomberman games played : {{ bbm_games }}</a><br>
+    <a href="{% url 'userprofiles:bbm_victories' %}">Victories in Bomberman game : {{ bbm_victories }}</a><br>
+    <a href="{% url 'userprofiles:bbm_defeats' %}">Defeats in Bomberman game : {{ bbm_defeats }}</a><br>
+    <a href="{% url 'userprofiles:bbm_draws' %}">Draws in Bomberman game : {{ bbm_draws }}</a><br>
     <br>
-    Pong games played : {{ games }}<br>
-    Victories in pong game : {{ victories }}<br>
-    Defeats in pong game : {{ defeats }}<br>
+    <a href="{% url 'userprofiles:pong_games' %}">Pong games played : {{ games }}</a><br>
+    <a href="{% url 'userprofiles:pong_victories' %}">Victories in pong game : {{ victories }}</a><br>
+    <a href="{% url 'userprofiles:pong_defeats' %}">Defeats in pong game : {{ defeats }}</a><br>
 </p>
 
 <p><a href="{% url 'userprofiles:modif' %}">modify username</a></p>

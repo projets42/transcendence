@@ -6,7 +6,7 @@ from .forms import ColorForm
 @login_required
 def start_game(request):
     n = 2
-    players = []
+    players = ["player1", "player2"]
     username = request.user.username
 
     if request.method == 'POST':
@@ -15,6 +15,13 @@ def start_game(request):
         form = ColorForm(request.POST)
         if form.is_valid():
             return run_game(request)
+
+        if request.POST.get('send') == 'Cancel':
+            tournament = BombermanTournament.objects.all().filter(creator = username)
+            while tournament.count():
+                game = tournament[0]
+                game.delete()
+            return render(request, "index.html", {"page": "bomberman", "game": "off", "number": 2, "players": ["player1", "player2"]})
             
         # game end
         if request.POST.get('send') == 'result':
@@ -22,20 +29,25 @@ def start_game(request):
 
         # select number of players
         n = int(request.POST["players_number"])
+        players = request.POST.getlist("names")
         if request.POST.get('send') == '+' and n < 10:
             n += 1
         elif request.POST.get('send') == '-' and n > 2:
             n -= 1
         elif request.POST.get('send') == 'PLAY':
-            create_tournament_tables(request, username)
+            if len(players) == len(set(players)):
+                create_tournament_tables(request, username)
+            else:
+                return render(request, "index.html", {"page": "bomberman", "game": "off", "number": n, "players": players, "error": "usernames must be unique"})
 
 
     # display players subscription
     if BombermanTournament.objects.all().filter(creator = username).count() == 0:
-        i = 1
-        while i <= n:
+        i = len(players) + 1
+        if n == i:
             players.append("player" + str(i))
-            i += 1
+        if n == len(players) - 1:
+            players.pop()
         return render(request, "index.html", {"page": "bomberman", "game": "off", "number": n, "players": players})
     
 
@@ -49,6 +61,16 @@ def run_game(request):
     color1 = request.POST["color1"]
     color2 = request.POST["color2"]
     return render(request, "index.html", {"page": "bomberman", "game": "on", "color1": color1, "color2": color2})
+
+
+def create_tournament_tables(request, username):
+    usernames = request.POST.getlist("names")
+    i = 0
+    while i + 1 < len(usernames):
+        BombermanTournament.objects.create(creator = username, player1 = usernames[i], player2 = usernames[i + 1])
+        i += 2
+    if i < len(usernames):
+        BombermanTournament.objects.create(creator = username, player1 = usernames[i])
 
 
 def end_game(request, username):
@@ -126,13 +148,3 @@ def end_game(request, username):
     else:
         winner = ""
     return render(request, "index.html", {"page": "bomberman", "game": "end", "winner": winner})
-
-
-def create_tournament_tables(request, username):
-    usernames = request.POST.getlist("names")
-    i = 0
-    while i + 1 < len(usernames):
-        BombermanTournament.objects.create(creator = username, player1 = usernames[i], player2 = usernames[i + 1])
-        i += 2
-    if i < len(usernames):
-        BombermanTournament.objects.create(creator = username, player1 = usernames[i])

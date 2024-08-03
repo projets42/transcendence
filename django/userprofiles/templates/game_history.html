@@ -9,9 +9,21 @@
         font-size: 2rem;
     }
 
+    #backButton{
+        position: absolute;
+        top: 2rem;
+        left: 1rem;
+        font-size: 2rem;
+        color: white;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
 </style>
 
-<p id="back"><a href="{% url 'index' %}"><< back</a></p>
+<button id="backButton" onclick="history.back()"><< back</button>
 
 <p>
     {% if user.profileimg.picture %}

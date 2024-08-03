@@ -6,6 +6,7 @@ from .forms import UserForm, ModificationForm
 from .models import ProfileImg
 from django.contrib.auth.decorators import login_required
 from bomberman.models import Bomberman
+from pong.models import Pong
 from django.db.models import Q
 
 def register_user(request):
@@ -46,11 +47,17 @@ def logout_user(request):
 @login_required
 def show_profile(request):
     username = request.user.username
-    games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username)).count()
-    victories = Bomberman.objects.all().filter(winner = username, winner_score = 1).count()
-    defeats = Bomberman.objects.all().filter(loser = username, winner_score = 1).count()
-    draws = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0).count()
-    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "draws": draws})
+
+    bbm_games = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username)).count()
+    bbm_victories = Bomberman.objects.all().filter(winner = username, winner_score = 1).count()
+    bbm_defeats = Bomberman.objects.all().filter(loser = username, winner_score = 1).count()
+    bbm_draws = Bomberman.objects.all().filter(Q(winner = username) | Q(loser = username), winner_score = 0, loser_score = 0).count()
+
+    games = Pong.objects.all().filter(Q(winner = username) | Q(loser = username)).count()
+    victories = Pong.objects.all().filter(winner = username).count()
+    defeats = Pong.objects.all().filter(loser = username).count()
+
+    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "bbm_games": bbm_games, "bbm_victories": bbm_victories, "bbm_defeats": bbm_defeats, "bbm_draws": bbm_draws})
 
 
 @login_required
@@ -64,6 +71,27 @@ def modify_user_infos(request):
         form = ModificationForm()
 
     return render(request, "index.html", {"page": "modif_profile", "form": form})
+
+
+@login_required
+def pong_games(request):
+    username = request.user.username
+    games = Pong.objects.all().filter(Q(winner = username) | Q(loser = username))
+    return render(request, "index.html", {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games})
+
+
+@login_required
+def pong_victories(request):
+    username = request.user.username
+    games = Pong.objects.all().filter(winner = username, winner_score = 1)
+    return render(request, "index.html", {"page": "pong_games", "game_name": "Pong", "title": "victories", "games": games})
+
+
+@login_required
+def pong_defeats(request):
+    username = request.user.username
+    games = Pong.objects.all().filter(loser = username, winner_score = 1)
+    return render(request, "index.html", {"page": "pong_games", "game_name": "Pong", "title": "defeats", "games": games})
 
 
 @login_required

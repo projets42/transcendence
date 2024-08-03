@@ -48,7 +48,26 @@
         display: none;
     }
 
+    #back{
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        font-size: 2rem;
+    }
+
+    #back a{
+        text-decoration: none;
+        color: black;
+    }
+
+    #cancelTournament{
+        background-color: transparent;
+        border: none;
+    }
+
 </style>
+
+<p id="back"><a href="{% url 'selection' %}"><< back</a></p>
 
 {% if game == "off" %}
 
@@ -62,23 +81,34 @@
             <input type="submit" value="PLAY">
         </form>
 
+        <form id="cancelTournament" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Cancel" name="send">
+        </form>
+
     {% else %}
 
         <form method="post">
             {% csrf_token %}
+
+            <!-- input submit not visible to send form when Enter is pressed -->
             <input id="validate" type="submit" value="PLAY" name="send">
+
             <p>
                 <label for="nplayers">Number of players:</label>
                 <input type="submit" value="-" name="send">
                 <input name="players_number" id="nplayers" type="number" value="{{ number }}" readonly>
                 <input type="submit" value="+" name="send">
             </p>
+
             <p id="username_list">
                 {% for player in players %}
                     <input type="text" name="names" value="{{ player }}" required maxlength="15">
                 {% endfor %}
             </p>
+
             <input type="submit" value="PLAY" name="send">
+            <p style="color: red;">{{ error }}</p>
         </form>
 
     {% endif %}
