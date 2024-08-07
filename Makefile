@@ -1,27 +1,34 @@
+NAME = transcendence
 
-IMAGE	=	django
-
-all:
-	docker compose build
-	docker compose up -d
+all: up
 
 build:
-	docker build -t $(IMAGE) .
+	@echo "\033[34mBuilding configuration ${NAME}...\033[0m"
+	@docker compose -f ./srcs/docker-compose.yml build
 
-run:
-	docker run -d -p 8000:8000 $(IMAGE)
+up:
+	@echo "\033[34mLaunching configuration ${NAME}...\033[0m"
+	@docker compose -f ./srcs/docker-compose.yml up -d
 
-clean:
-	docker compose down
+down:
+	@echo "\033[34mStopping configuration ${NAME}...\033[0m"
+	@docker compose -f ./srcs/docker-compose.yml down -v
 
-fclean:	clean
-	@docker rm -f $$(docker ps -qa) 2>/dev/null || echo "no container to delete"
-	@docker image rm -f $$(docker image ls -q) 2>/dev/null || echo "no image to delete"
-	@docker volume rm $$(docker volume ls -q) 2>/dev/null || echo "no volume to delete"
-	docker system prune -af --volumes
+clean: down
+	@echo "\033[34mCleaning configuration ${NAME}...\033[0m"
+	@docker system prune -a
 
-re: fclean all
+fclean: down
+	@echo "\033[34mTotal clean of all Docker configurations\033[0m"
+	@if [ $$(docker ps -q | wc -l) -gt 0 ]; then \
+	    docker stop $$(docker ps -qa); \
+	fi
+	@docker system prune --all --force --volumes
+	@docker network prune --force
+	@docker volume prune --force
 
-rb: fclean build run
+re: down
+	@echo "\033[34mRebuilding configuration ${NAME}...\033[0m"
+	@docker compose -f ./srcs/docker-compose.yml up -d --build
 
-.PHONY: all build run fclean re
+.PHONY: all build down re clean fclean
