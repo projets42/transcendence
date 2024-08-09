@@ -1,0 +1,42 @@
+IDEAS
+
+Mode Quilles:
+le pong est en relief donc lorsqu'elle touche le mur la balle sort du cadre est va decaniller des "quilles" qui donneront des bonus et/ou des malus (dont la "boule noir qui fait perdre la game emdeaire")
+
+Mode Race:
+par ex 5 terrains en lignes les uns a la suite des autres et si tu gagnes le terrain se deplace du cotes qu t'as marque
+
+2v2
+les joueurs peuvent pousser le padlle de leur allie
+
+
+
+PROBLEMES:
+
+-changedirection (pour les paddles) n'est pas appele dans gamestart() mais marche quand meme et a l'air synchro avec gamestart() bizarre
+surement parce que c'est addevent qui l'appelle et qui est actualise independamment de gamestart() mais est du coup pas affecter par le timeout et actualise la valeur qu'importe le timeout
+
+-les balles traversent les paddles a une certaine vitesse
+
+
+
+
+
+
+
+modules a faire (lire le sujet) :
+-customisation (obstacle, power up, );
+-ia;
+-multiplayer en local a plus que 2 joueurs
+-matchmaking/tournoi
+-remote player
+
+
+
+
+notes pour demain :
+-si l'ia atteindra pas la balle mais que yen a qu'une essaye quand meme de l'attraper peut-etre car sinon il a l'air passif
+-enlever targetball et "l'implementer" dans fakeballs (changer la facon dont ca marche pour opti)
+-ajouter une limite de vitesse pour les balles
+-faire un sorte que les balles ne traversent pas a une certaine vitesse
+-peut-etre regler le probleme de vitesse doubler  ( ex si player 1 descend en poussant player 3 et player 3 descend player 3 se deplace de 2 fois paddlespeed)

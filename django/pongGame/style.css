@@ -1,0 +1,29 @@
+#gameContainer{
+    text-align: center;
+}
+
+#gameBoard{
+    border: 10px outset ; /* or inset or solid */
+}
+
+#scoreText{
+    font-family: "consolas", monospace;
+    font-size: 100px;
+}
+
+.clickBtn{
+    font-family: "Permanent Marker", cursive;
+    font-size: 22px;
+    padding: 5px 10px;
+    margin: 3px;
+    border: 4px solid;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.clickBtn:hover{
+    background-color: aliceblue;
+}
+#ballsLbl{
+    font-size: 30px;
+    font-weight: bold;
+}
