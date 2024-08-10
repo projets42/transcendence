@@ -50,7 +50,20 @@
 
     <p>
         {{ game.date | date:"m/d/y g:i a" }}<br>
-        {{ game.winner }} {{ game.winner_score }} - {{ game.loser_score }} {{ game.loser }}
+
+        {% if game.winner_id == -1 %}
+            {{ game.winner }}
+        {% else %}
+            {{ user.username }}
+        {% endif %}
+
+        {{ game.winner_score }} - {{ game.loser_score }}
+
+        {% if game.loser_id == -1 %}
+            {{ game.loser }}
+        {% else %}
+            {{ user.username }}
+        {% endif %}
     </p>
 
 {% endfor %}

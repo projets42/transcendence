@@ -18,3 +18,11 @@ class ModificationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username',)
+
+
+class ModificationPictureForm(forms.ModelForm):
+    picture = forms.ImageField(label = "Profile picture:", required = False)
+
+    class Meta:
+        model = User
+        fields = ('picture',)

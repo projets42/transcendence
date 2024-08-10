@@ -18,7 +18,7 @@
 
 </style>
 
-<button id="backButton" onclick="history.back()"><< back</button>
+<p id="back"><a href="{% url 'index' %}"><< back</a></p>
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %} 
@@ -29,9 +29,3 @@
 {% for message in messages %}
     <p>{{ message }}</p>
 {% endfor %}
-
-<script>
-
-    document.getElementById('id_username').value = "{{ user.username }}";
-
-</script>

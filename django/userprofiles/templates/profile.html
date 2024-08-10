@@ -26,11 +26,13 @@
 <button id="backButton" onclick="history.back()"><< back</button>
 
 <p>
-    {% if user.profileimg.picture %}
-        <img src="{{ user.profileimg.picture.url }}" width="100" height="100" style="border-radius:50%"><br>
-    {% else %}
-        <img src="/media/images/default.png" width="100" height="100" style="border-radius:50%"><br>
-    {% endif %}
+    <a href="{% url 'userprofiles:modif_picture' %}">
+        {% if user.profileimg.picture %}
+            <img src="{{ user.profileimg.picture.url }}" width="100" height="100" style="border-radius:50%"><br>
+        {% else %}
+            <img src="/media/images/default.png" width="100" height="100" style="border-radius:50%"><br>
+        {% endif %}
+    </a>
     {{ user.username }}
 </p>
 
@@ -45,5 +47,5 @@
     <a href="{% url 'userprofiles:pong_defeats' %}">Defeats in pong game : {{ defeats }}</a><br>
 </p>
 
-<p><a href="{% url 'userprofiles:modif' %}">modify username</a></p>
+<p><a href="{% url 'userprofiles:modif_name' %}">modify username</a></p>
 <p><a href="{% url 'userprofiles:logout' %}">log out</a></p>

@@ -1,0 +1,37 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'form_style.css' %}">
+
+<style>
+
+    #backButton{
+        position: absolute;
+        top: 2rem;
+        left: 1rem;
+        font-size: 2rem;
+        color: white;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+</style>
+
+<p id="back"><a href="{% url 'index' %}"><< back</a></p>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    {{form.as_p}}
+    <input type="submit" value ="Save"/> 
+</form>
+
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+<script>
+
+    document.getElementById('id_username').value = "{{ user.username }}";
+
+</script>

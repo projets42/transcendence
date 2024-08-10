@@ -11,8 +11,8 @@ tileMap.setCanvasSize(canvas);
 
 let players = [];
 
-let p1_controls = {up: 38, down: 40, left: 37, right: 39, action: 96};
-let p2_controls = {up: 87, down: 83, left: 65, right: 68, action: 32};
+let p1_controls = {up: 87, down: 83, left: 65, right: 68, action: 32};
+let p2_controls = {up: 38, down: 40, left: 37, right: 39, action: 96};
 
 let p1_color = JSON.parse(document.getElementById('color1').textContent);
 let p2_color = JSON.parse(document.getElementById('color2').textContent);
