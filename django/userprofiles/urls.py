@@ -18,4 +18,6 @@ urlpatterns = [
     path('bombermanvictories/', bbm_victories, name = 'bbm_victories'),
     path('bombermandefeats/', bbm_defeats, name = 'bbm_defeats'),
     path('bombermandraws/', bbm_draws, name = 'bbm_draws'),
+    path('friends/', list_friends, name = 'friends'),
+    path('request/', show_friend_request, name = 'friend_request'),
 ]

@@ -34,36 +34,38 @@
     {{ user.username }}
 </p>
 
+<p>
+    <a href="{% url 'userprofiles:friend_request' %}">Friend requests ({{ friend_request }})</a>
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Enter username to add friend" required maxlength="15">
+    <input type="submit" value="add friend" name="send">
+</form>
+
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+<br>
+
 <h2>
-    {{ game_name }} game {{ title }}
+    Friends
 </h2>
 
-{% if not games %}
+{% if not friends %}
 
     <p>
-        No {{ title }}
+        No friends yet
     </p>
 
 {% endif %}
 
-{% for game in games %}
+{% for friend in friends %}
 
     <p>
-        {{ game.date | date:"m/d/y g:i a" }}<br>
-
-        {% if game.winner_id == -1 %}
-            {{ game.winner }}
-        {% else %}
-            {{ user.username }}
-        {% endif %}
-
-        {{ game.winner_score }} - {{ game.loser_score }}
-
-        {% if game.loser_id == -1 %}
-            {{ game.loser }}
-        {% else %}
-            {{ user.username }}
-        {% endif %}
+        {{ friend }}
     </p>
 
 {% endfor %}

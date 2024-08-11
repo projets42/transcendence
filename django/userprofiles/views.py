@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, ModificationForm, ModificationPictureForm
-from .models import ProfileImg
+from .models import ProfileImg, Friend
 from django.contrib.auth.decorators import login_required
 from bomberman.models import Bomberman
 from pong.models import Pong
@@ -49,6 +49,8 @@ def logout_user(request):
 def show_profile(request):
     user_id = request.user.id
 
+    friends = Friend.objects.all().filter(user = request.user, confirmed = True).count()
+
     bbm_games = Bomberman.objects.all().filter(Q(winner_id = user_id) | Q(loser_id = user_id)).count()
     bbm_victories = Bomberman.objects.all().filter(winner_id = user_id, winner_score = 1).count()
     bbm_defeats = Bomberman.objects.all().filter(loser_id = user_id, winner_score = 1).count()
@@ -58,7 +60,7 @@ def show_profile(request):
     victories = Pong.objects.all().filter(winner_id = user_id).count()
     defeats = Pong.objects.all().filter(loser_id = user_id).count()
 
-    return render(request, "index.html", {"page": "profile", "games": games, "victories": victories, "defeats": defeats, "bbm_games": bbm_games, "bbm_victories": bbm_victories, "bbm_defeats": bbm_defeats, "bbm_draws": bbm_draws})
+    return render(request, "index.html", {"page": "profile", "friends": friends, "games": games, "victories": victories, "defeats": defeats, "bbm_games": bbm_games, "bbm_victories": bbm_victories, "bbm_defeats": bbm_defeats, "bbm_draws": bbm_draws})
 
 
 @login_required
@@ -140,3 +142,54 @@ def bbm_draws(request):
     user_id = request.user.id
     games = Bomberman.objects.all().filter(Q(winner_id = user_id) | Q(loser_id = user_id), winner_score = 0, loser_score = 0)
     return render(request, "index.html", {"page": "bbm_games", "game_name": "Bomberman", "title": "draws", "games": games})
+
+
+@login_required
+def list_friends(request):
+    if request.method == 'POST':
+        if request.POST.get('send') == 'add friend':
+            username = request.POST["name"]
+            user = User.objects.all().filter(username = username)
+            if username == request.user.username:
+                messages.info(request, "Are you that desperate ?")
+            elif user:
+                friend = Friend.objects.all().filter(user = user[0], friend = request.user.id)
+                friendship = Friend.objects.all().filter(user = request.user, friend = user[0].id)
+                if friend | friendship:
+                    messages.info(request, "Request was already sent")
+                else:
+                    Friend.objects.create(user = user[0], friend = request.user.id)
+                    messages.info(request, "Request has been sent")
+            else:
+                messages.info(request, "User not found")
+
+    friends = Friend.objects.all().filter(user = request.user, confirmed = True)
+    usernames = []
+    for friend in friends:
+        user = User.objects.all().filter(id = friend.friend)
+        usernames.append(user[0].username)
+    demands = Friend.objects.all().filter(user = request.user, confirmed = False).count()
+    return render(request, "index.html", {"page": "friends_list", "friends": usernames, "friend_request": demands})
+
+
+@login_required
+def show_friend_request(request):
+    if request.method == 'POST':
+        username = request.POST["name"]
+        user = User.objects.all().filter(username = username)
+        if user:
+            friend = Friend.objects.all().filter(user = request.user, friend = user[0].id)
+            friendship = friend[0]
+            if request.POST.get('send') == 'yes':
+                friendship.confirmed = True
+                friendship.save()
+                Friend.objects.create(user = user[0], friend = request.user.id, confirmed = True)
+            if request.POST.get('send') == 'no':
+                friendship.delete()
+    demands = Friend.objects.all().filter(user = request.user, confirmed = False)
+    usernames = []
+    for req in demands:
+        user = User.objects.all().filter(id = req.friend)
+        if user:
+            usernames.append(user[0].username)
+    return render(request, "index.html", {"page": "friend_request", "friend_request": usernames})

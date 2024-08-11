@@ -23,7 +23,7 @@
 
 </style>
 
-<button id="backButton" onclick="history.back()"><< back</button>
+<p id="back"><a href="{% url 'index' %}"><< back</a></p>
 
 <p>
     <a href="{% url 'userprofiles:modif_picture' %}">
@@ -37,14 +37,16 @@
 </p>
 
 <p>
-    <a href="{% url 'userprofiles:bbm_games' %}">Bomberman games played : {{ bbm_games }}</a><br>
-    <a href="{% url 'userprofiles:bbm_victories' %}">Victories in Bomberman game : {{ bbm_victories }}</a><br>
-    <a href="{% url 'userprofiles:bbm_defeats' %}">Defeats in Bomberman game : {{ bbm_defeats }}</a><br>
-    <a href="{% url 'userprofiles:bbm_draws' %}">Draws in Bomberman game : {{ bbm_draws }}</a><br>
+    <a href="{% url 'userprofiles:friends' %}">Friends : {{ friends }}</a><br>
     <br>
     <a href="{% url 'userprofiles:pong_games' %}">Pong games played : {{ games }}</a><br>
     <a href="{% url 'userprofiles:pong_victories' %}">Victories in pong game : {{ victories }}</a><br>
     <a href="{% url 'userprofiles:pong_defeats' %}">Defeats in pong game : {{ defeats }}</a><br>
+    <br>
+    <a href="{% url 'userprofiles:bbm_games' %}">Bomberman games played : {{ bbm_games }}</a><br>
+    <a href="{% url 'userprofiles:bbm_victories' %}">Victories in Bomberman game : {{ bbm_victories }}</a><br>
+    <a href="{% url 'userprofiles:bbm_defeats' %}">Defeats in Bomberman game : {{ bbm_defeats }}</a><br>
+    <a href="{% url 'userprofiles:bbm_draws' %}">Draws in Bomberman game : {{ bbm_draws }}</a><br>
 </p>
 
 <p><a href="{% url 'userprofiles:modif_name' %}">modify username</a></p>

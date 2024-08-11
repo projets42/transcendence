@@ -23,7 +23,7 @@
 
 </style>
 
-<p id="back"><a href="{% url 'userprofiles:profile' %}"><< back</a></p>
+<p id="back"><a href="{% url 'userprofiles:friends' %}"><< back</a></p>
 
 <p>
     {% if user.profileimg.picture %}
@@ -34,36 +34,30 @@
     {{ user.username }}
 </p>
 
+<br>
+
 <h2>
-    {{ game_name }} game {{ title }}
+    Friend requests
 </h2>
 
-{% if not games %}
+{% if not friend_request %}
 
     <p>
-        No {{ title }}
+        No friend request
     </p>
 
 {% endif %}
 
-{% for game in games %}
+{% for req in friend_request %}
 
     <p>
-        {{ game.date | date:"m/d/y g:i a" }}<br>
-
-        {% if game.winner_id == -1 %}
-            {{ game.winner }}
-        {% else %}
-            {{ user.username }}
-        {% endif %}
-
-        {{ game.winner_score }} - {{ game.loser_score }}
-
-        {% if game.loser_id == -1 %}
-            {{ game.loser }}
-        {% else %}
-            {{ user.username }}
-        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ req }} :
+            <input type="hidden" name="name" value="{{ req }}">
+            <input type="submit" value="yes" name="send">
+            <input type="submit" value="no" name="send">
+        </form>
     </p>
 
 {% endfor %}
