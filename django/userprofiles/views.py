@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, ModificationForm, ModificationPictureForm
-from .models import ProfileImg, Friend
+from .models import ProfileImg, Friend, Status
 from django.contrib.auth.decorators import login_required
 from bomberman.models import Bomberman
 from pong.models import Pong
@@ -17,6 +17,7 @@ def register_user(request):
             usr = form.save()
             img = ProfileImg(user=usr, picture=form.cleaned_data.get('picture'))
             img.save()
+            Status.objects.create(user = usr)
             messages.info(request, "Account created")
     else:
         form = UserForm()
@@ -32,6 +33,16 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
+
+            # change user online status
+            status = Status.objects.all().filter(user = request.user)
+            if status:
+                user = status[0]
+                user.state = 1
+                user.save()
+            else:
+                new_status = Status.objects.create(user = request.user, state = 1)
+
             return redirect("index")
         else:
             messages.info(request, "Wrong password or username")
@@ -41,6 +52,14 @@ def login_user(request):
 
 
 def logout_user(request):
+    status = Status.objects.all().filter(user = request.user)
+    if status:
+        user = status[0]
+        user.state = 0
+        user.save()
+    else:
+        new_status = Status.objects.create(user = request.user)
+
     logout(request)
     return redirect("index")
 
@@ -162,14 +181,26 @@ def list_friends(request):
                     messages.info(request, "Request has been sent")
             else:
                 messages.info(request, "User not found")
+        else:
+            friend_id = request.POST["friend_id"]
+            friend = User.objects.all().filter(id = friend_id)
+            if friend:
+                games = Pong.objects.all().filter(Q(winner_id = friend_id) | Q(loser_id = friend_id)).count()
+                victories = Pong.objects.all().filter(winner_id = friend_id).count()
+                defeats = Pong.objects.all().filter(loser_id = friend_id).count()
+                bbm_games = Bomberman.objects.all().filter(Q(winner_id = friend_id) | Q(loser_id = friend_id)).count()
+                bbm_victories = Bomberman.objects.all().filter(winner_id = friend_id, winner_score = 1).count()
+                bbm_defeats = Bomberman.objects.all().filter(loser_id = friend_id, winner_score = 1).count()
+                bbm_draws = Bomberman.objects.all().filter(Q(winner_id = friend_id) | Q(loser = friend_id), winner_score = 0, loser_score = 0).count()
+                return render(request, "index.html", {"page": "friends_list", "friend": friend[0], "games": games, "victories": victories, "defeats": defeats, "bbm_games": bbm_games, "bbm_victories": bbm_victories, "bbm_defeats": bbm_defeats, "bbm_draws": bbm_draws})
 
     friends = Friend.objects.all().filter(user = request.user, confirmed = True)
-    usernames = []
+    users = []
     for friend in friends:
         user = User.objects.all().filter(id = friend.friend)
-        usernames.append(user[0].username)
+        users.append(user[0])
     demands = Friend.objects.all().filter(user = request.user, confirmed = False).count()
-    return render(request, "index.html", {"page": "friends_list", "friends": usernames, "friend_request": demands})
+    return render(request, "index.html", {"page": "friends_list", "friends": users, "friend_request": demands})
 
 
 @login_required
