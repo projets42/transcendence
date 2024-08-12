@@ -5,5 +5,5 @@ from .views import *
 app_name = "bomberman"
 
 urlpatterns = [
-    path('play/', start_game, name = 'play'),
+    path('', start_game, name = 'play'),
 ]

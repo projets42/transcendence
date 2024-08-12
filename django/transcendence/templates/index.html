@@ -46,9 +46,21 @@
     
         {% include "./profile.html" %}
 
-    {% elif page == "modif_profile" %}
+    {% elif page == "modif_username" %}
 
-        {% include "./modif_profile.html" %}
+        {% include "./modif_username.html" %}
+
+    {% elif page == "modif_picture" %}
+
+        {% include "./modif_picture.html" %}
+
+    {% elif page == "friends_list" %}
+
+        {% include "./friends_list.html" %}
+
+    {% elif page == "friend_request" %}
+
+        {% include "./friend_request.html" %}
 
     {% elif page == "pong_local" %}
 
@@ -64,6 +76,10 @@
 
         {% include "./userinfos.html" %}
         {% include "./bomberman.html" %}
+
+    {% elif page == "pong_games" or page == "bbm_games" %}
+
+            {% include "./game_history.html" %}
 
     {% endif %}
 

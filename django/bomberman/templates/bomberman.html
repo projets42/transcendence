@@ -15,83 +15,131 @@
         box-shadow: 10px 10px 15px black;
     }
 
-    #game_container{
+    form{
+        display: flex;
+        flex-direction: column;
+        background-color: black;
+        padding: 50px;
+        font-size: 1.8em;
+        border: 5px dashed white;
+    }
+
+    #fields{
+        display: flex;
+    }
+
+    #username_list{
+        display: flex;
+        flex-direction: column;
+        height: 25vh;
+        overflow: auto;
+    }
+
+    #playersName{
+        font-size: 1.8em;
+        text-align: center;
+    }
+
+    #validate{
+        position: absolute; left: -100%;
+    }
+
+    #winnerForm{
         display: none;
     }
 
-    #selection{
-        display: flex;
-        justify-content: space-around;
-        padding: 50px;
-        width: 50vw;
-        font-size: 1.8em;
+    #back{
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        font-size: 2rem;
     }
 
-    button{
-        font-size: 1.5em;
-        font-weight: bold;
+    #back a{
+        text-decoration: none;
+        color: black;
+    }
+
+    #cancelTournament{
+        background-color: transparent;
+        border: none;
     }
 
 </style>
 
-<div id="selection">
+<p id="back"><a href="{% url 'selection' %}"><< back</a></p>
 
-    <div id="player1">
+{% if game == "off" %}
 
-        <p>PLAYER 1</p>
+    {% if form %}
 
-        <input type="radio" id="white1" name="color1" value="white" checked="checked">
-        <label for="white1">white</label><br>
+        <form method="post">
+            {% csrf_token %}
+            <p id="playersName">{{ name1 }} vs {{ name2 }}</p>
+            <div id="fields">{{ form }}</div>
+            <br>
+            <input type="submit" value="PLAY">
+        </form>
 
-        <input type="radio" id="black1" name="color1" value="black">
-        <label for="black1">black</label><br>
+        <form id="cancelTournament" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Cancel" name="send">
+        </form>
 
-        <input type="radio" id="yellow1" name="color1" value="yellow">
-        <label for="yellow1">yellow</label><br>
+    {% else %}
 
-        <input type="radio" id="red1" name="color1" value="red">
-        <label for="red1">red</label><br>
+        <form method="post">
+            {% csrf_token %}
 
-        <input type="radio" id="green1" name="color1" value="green">
-        <label for="green1">green</label><br>
+            <!-- input submit not visible to send form when Enter is pressed -->
+            <input id="validate" type="submit" value="PLAY" name="send">
 
-        <input type="radio" id="blue1" name="color1" value="blue">
-        <label for="blue1">blue</label><br>
+            <p>
+                <label for="nplayers">Number of players:</label>
+                <input type="submit" value="-" name="send">
+                <input name="players_number" id="nplayers" type="number" value="{{ number }}" readonly>
+                <input type="submit" value="+" name="send">
+            </p>
 
+            <p id="username_list">
+                {% for player in players %}
+                    <input type="text" name="names" value="{{ player }}" required maxlength="15">
+                {% endfor %}
+            </p>
+
+            <input type="submit" value="PLAY" name="send">
+            <p style="color: red;">{{ error }}</p>
+        </form>
+
+    {% endif %}
+
+{% elif game == "on" %}
+
+    <div id="game_container">
+        <canvas id="game"></canvas>
     </div>
 
-    <div id="player2">
+    {{ color1 | json_script:"color1" }}
+    {{ color2 | json_script:"color2" }}
 
-        <p>PLAYER 2</p>
+    <form id="winnerForm" method="post">
+        {% csrf_token %}
+        <input type="text" id="winner" name="winner">
+        <input type="submit" id="result" name="send" value="result">
+    </form>
 
-        <input type="radio" id="white2" name="color2" value="white">
-        <label for="white2">white</label><br>
+    <script src="{% static 'game.js' %}" type="module"></script>
 
-        <input type="radio" id="black2" name="color2" value="black" checked="checked">
-        <label for="black2">black</label><br>
+{% else %}
 
-        <input type="radio" id="yellow2" name="color2" value="yellow">
-        <label for="yellow2">yellow</label><br>
+    {% if winner %}
 
-        <input type="radio" id="red2" name="color2" value="red">
-        <label for="red2">red</label><br>
+        <h1>The winner is {{ winner }}</h1>
 
-        <input type="radio" id="green2" name="color2" value="green">
-        <label for="green2">green</label><br>
+    {% else %}
 
-        <input type="radio" id="blue2" name="color2" value="blue">
-        <label for="blue2">blue</label><br>
+        <h1>Nobody won :(</h1>
 
-    </div>
+    {% endif %}
 
-</div>
-
-<div id="btContainer">
-    <button id="startGame">PLAY !</button>
-</div>
-
-<div id="game_container">
-    <canvas id="game"></canvas>
-</div>
-
-<script src="{% static 'game.js' %}" type="module"></script>
+{% endif %}
