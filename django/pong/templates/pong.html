@@ -1,0 +1,88 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'pong_style.css' %}">
+
+<p id="back"><a href="{% url 'selection' %}"><< back</a></p>
+
+{% if game == "off" %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div id="fields">
+            <div>
+                <label>Number of players :</label>
+                {% if nplayers == "1v1" %}
+                    <label for="id_number_0"><input type="radio" name="number" value="1v1" required id="id_number_0" checked>2</label>
+                    <label for="id_number_1"><input type="radio" name="number" value="2v2" required id="id_number_1">4</label>
+                {% else %}
+                    <label for="id_number_0"><input type="radio" name="number" value="1v1" required id="id_number_0">2</label>
+                    <label for="id_number_1"><input type="radio" name="number" value="2v2" required id="id_number_1" checked>4</label>
+                {% endif %}
+
+            </div>
+            <div>
+                <label>AI:</label>
+                <label style="display: none;" for="id_botplayers_0"><input type="checkbox" name="botplayers" value="0" id="id_botplayers_0" checked>None</label>
+                {% if bot1 %}
+                    <label for="id_botplayers_1"><input type="checkbox" name="botplayers" value="1" id="id_botplayers_1" checked>Player1</label>
+                {% else %}
+                    <label for="id_botplayers_1"><input type="checkbox" name="botplayers" value="1" id="id_botplayers_1">Player1</label>
+                {% endif %}
+                {% if bot2 %}
+                    <label for="id_botplayers_2"><input type="checkbox" name="botplayers" value="2" id="id_botplayers_2" checked>Player2</label>
+                {% else %}
+                    <label for="id_botplayers_2"><input type="checkbox" name="botplayers" value="2" id="id_botplayers_2">Player2</label>
+                {% endif %}
+                {% if bot3 %}
+                    <label for="id_botplayers_3"><input type="checkbox" name="botplayers" value="3" id="id_botplayers_3" checked>Player3</label>
+                {% else %}
+                    <label for="id_botplayers_3"><input type="checkbox" name="botplayers" value="3" id="id_botplayers_3">Player3</label>
+                {% endif %}
+                {% if bot4 %}
+                    <label for="id_botplayers_4"><input type="checkbox" name="botplayers" value="4" id="id_botplayers_4" checked>Player4</label>
+                {% else %}
+                    <label for="id_botplayers_4"><input type="checkbox" name="botplayers" value="4" id="id_botplayers_4">Player4</label>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <p>
+            <label for="nballs">Number of balls:</label>
+            <input type="submit" value="-" name="send">
+            <input name="balls_number" id="nballs" type="number" value="{{ balls }}" readonly>
+            <input type="submit" value="+" name="send">
+        </p>
+        <p>
+            <label for="nballs">Score to win:</label>
+            <input type="submit" value="-" name="sendScore">
+            <input name="score_to_win" id="score" type="number" value="{{ score }}" readonly>
+            <input type="submit" value="+" name="sendScore">
+        </p>
+        <input type="submit" value="PLAY" name="send">
+    </form>
+
+{% else %}
+
+    <div id="gameContainer">
+        <canvas id="gameBoard" width="1000" height="500"></canvas>
+        <div id="scoreText">0 : 0</div>
+        <div id="firstRowBtn">
+            <button id="resetBtn" class="clickBtn">Reset</button>
+            <button id="reset4PlayersBtn" class="clickBtn">4 players</button>
+        </div>
+        <div id="secondRowBtn">
+            <button id="player1Btn" class="clickBtn">player 1 🧑</button>
+            <button id="player2Btn" class="clickBtn">player 2 🧑</button>
+            <button id="player3Btn" class="clickBtn">player 3 ❌</button>
+            <button id="player4Btn" class="clickBtn">player 4 ❌</button>
+        </div>
+        <div id="thirdRowBtn">
+            <button id="decreaseBalls" class="clickBtn">-</button>
+            <label id="ballsLbl">1</label>
+            <button id="increaseBalls" class="clickBtn">+</button>
+        </div>
+    </div>
+
+    <script src="{% static 'index.js' %}"></script>
+
+{% endif %}
