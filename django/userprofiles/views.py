@@ -15,8 +15,10 @@ def register_user(request):
         form = UserForm(request.POST, request.FILES)
         if form.is_valid():
             usr = form.save()
-            img = ProfileImg(user=usr, picture=form.cleaned_data.get('picture'))
-            img.save()
+            if form.cleaned_data.get('picture') == None:
+                ProfileImg.objects.create(user = usr, picture = "images/default.png")
+            else:
+                ProfileImg.objects.create(user = usr, picture = form.cleaned_data.get('picture'))
             Status.objects.create(user = usr)
             messages.info(request, "Account created")
     else:
