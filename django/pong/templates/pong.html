@@ -70,18 +70,20 @@
             <button id="resetBtn" class="clickBtn">Reset</button>
             <button id="reset4PlayersBtn" class="clickBtn">4 players</button>
         </div>
-        <div id="secondRowBtn">
-            <button id="player1Btn" class="clickBtn">player 1 🧑</button>
-            <button id="player2Btn" class="clickBtn">player 2 🧑</button>
-            <button id="player3Btn" class="clickBtn">player 3 ❌</button>
-            <button id="player4Btn" class="clickBtn">player 4 ❌</button>
-        </div>
-        <div id="thirdRowBtn">
-            <button id="decreaseBalls" class="clickBtn">-</button>
-            <label id="ballsLbl">1</label>
-            <button id="increaseBalls" class="clickBtn">+</button>
-        </div>
     </div>
+
+    <!-- "1v1" | "2v2" (str) -->
+    {{ nplayers | json_script:"nplayers" }}
+
+    <!-- True | False -->
+    {{ bot1 | json_script:"bot1" }}
+    {{ bot2 | json_script:"bot2" }}
+    {{ bot3 | json_script:"bot3" }}
+    {{ bot4 | json_script:"bot4" }}
+
+    <!-- int entre 1 - 100 -->
+    {{ balls | json_script:"balls" }}
+    {{ score | json_script:"score" }}
 
     <script src="{% static 'index.js' %}"></script>
 

@@ -20,21 +20,21 @@ gameBoard.height = gameHeight;
 const boardBackground = "white";
 let intervalID;
 const ACTUALISATIONIA = 1000;
-let scoreToWin = 1;
+
+//settings bigBoss in the channel
+const nbrPlayers = document.getElementById('nplayers').textContent;
+const player1Bot = document.getElementById('bot1').textContent;
+const player2Bot = document.getElementById('bot2').textContent;
+const player3Bot = document.getElementById('bot3').textContent;
+const player4Bot = document.getElementById('bot4').textContent;
+const ballNbr = document.getElementById('balls').textContent;
+const scoreToWin = document.getElementById('score').textContent;
 let gameIsFinished = false;
 
+
 //paddle
-const OFFLINE = 0;
-const HUMAN = 1;
-const IA = 2;
 const TOP = 1;
 const BOTTOM = 2;
-let playerHumanOrIA = {
-    player1: 1,
-    player2: 1,
-    player3: 0,
-    player4: 0,
-}
 const paddleColor = "white";
 // const paddleBorder = "black";
 const paddleSpeed = 10;
@@ -45,12 +45,11 @@ const paddleSpawn = (gameHeight - paddleHeight) / 2;
 const paddleSpawnTop = Math.floor((gameHeight - paddleHeight4Players) / 4 / 10) * 10;
 const paddleSpawnBottom = Math.floor((gameHeight - paddleHeight4Players) * 3 / 4 / 10) * 10;
 class Paddle{
-    constructor(width, height, x, y, status, yMin, yMax){
+    constructor(width, height, x, y, yMin, yMax){
         this.width = width;
         this.height = height
         this.x = x;
         this.y = y;
-        this.status = status;
         this.yMin = yMin;
         this.yMax = yMax;
         this.score = 0;
@@ -59,10 +58,10 @@ class Paddle{
         this.position = position;
     }
 }
-let paddle1 = new Paddle(0, 0, 0, 0, HUMAN);
-let paddle2 = new Paddle(0, 0, 0, 0, HUMAN);
-let paddle3 = new Paddle(0, 0, 0, 0, OFFLINE);
-let paddle4 = new Paddle(0, 0, 0, 0, OFFLINE);
+let paddle1 = new Paddle(0, 0, 0, 0);
+let paddle2 = new Paddle(0, 0, 0, 0);
+let paddle3 = new Paddle(0, 0, 0, 0);
+let paddle4 = new Paddle(0, 0, 0, 0);
 
 
 //ball
@@ -95,7 +94,6 @@ class Ball{
         this.ignore = false;
     }
 }
-let ballNbr = 1;
 
 
 //keyboard controls
@@ -113,23 +111,17 @@ let keys = [];
 //set events
 resetBtn.addEventListener("click", resetGame);
 reset4PlayersBtn.addEventListener("click", reset4Players);
-player1Btn.addEventListener("click", switchPlayer1);
-player2Btn.addEventListener("click", switchPlayer2);
-player3Btn.addEventListener("click", switchPlayer3);
-player4Btn.addEventListener("click", switchPlayer4);
-decreaseBalls.addEventListener("click", decreaseBallsCount);
-increaseBalls.addEventListener("click", increaseBallsCount);
-window.addEventListener("keydown", keyIsPressedPlayer1);
-window.addEventListener("keydown", keyIsPressedPlayer2);
 window.addEventListener("keyup", keyIsNotPressed);
 
 //settings players and IA
 let time = -1000;
 
 
+if (nbrPlayers == "\"1v1\"")
+    resetGame();
+else if (nbrPlayers == "\"2v2\"")
+    reset4Players();
 
-
-resetGame();
 
 // Pong for two Players
 function gameStart(balls, fakeballs){
@@ -199,9 +191,9 @@ function movePaddles(balls, fakeballs){
             checkBallDestination(balls[i], fakeballs[i], paddleHeight);
     }
 
-    if (paddle1.status == IA)
+    if (player1Bot == "true")
         movePaddlesIA(fakeballs, paddle1);
-    if (paddle2.status == IA)
+    if (player2Bot == "true")
         movePaddlesIA(fakeballs, paddle2);
 };
 function checkBallDestination(ball, fakeball, currentpaddleheight)
@@ -400,13 +392,13 @@ function movePaddles4Players(balls, fakeballs){
             checkBallDestination(balls[i], fakeballs[i], paddleHeight4Players);
     }
 
-    if (paddle1.status == IA)
+    if (player1Bot == "true")
         movePaddlesIA4Players(fakeballs, paddle1, paddle3, paddleSpawnTop);
-    if (paddle2.status == IA)
+    if (player2Bot == "true")
         movePaddlesIA4Players(fakeballs, paddle2, paddle4, paddleSpawnTop);
-    if (paddle3.status == IA)
+    if (player3Bot == "true")
         movePaddlesIA4Players(fakeballs, paddle3, paddle1, paddleSpawnBottom);
-    if (paddle4.status == IA)
+    if (player4Bot == "true")
         movePaddlesIA4Players(fakeballs, paddle4, paddle2, paddleSpawnBottom);
 
 
@@ -587,17 +579,14 @@ function checkCollision4Players(ball, fakeball){
 //reset functions
 function resetGame(){
     //set event listeners
-    paddle3.status = OFFLINE;
-    paddle4.status = OFFLINE;
-    player3Btn.textContent = `player 3 ❌`;
-    player4Btn.textContent = `player 4 ❌`;
-    window.removeEventListener("keydown", keyIsPressedPlayer3);
-    window.removeEventListener("keydown", keyIsPressedPlayer4);
-    
+    if (player1Bot == "false")
+        window.addEventListener("keydown", keyIsPressedPlayer1);
+    if (player2Bot == "false")
+        window.addEventListener("keydown", keyIsPressedPlayer2);
     
     //set paddles
-    paddle1 = new Paddle(paddleWidth, paddleHeight, 0, paddleSpawn, paddle1.status, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
-    paddle2 = new Paddle(paddleWidth, paddleHeight, gameWidth - paddleWidth, paddleSpawn, paddle2.status, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
+    paddle1 = new Paddle(paddleWidth, paddleHeight, 0, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
+    paddle2 = new Paddle(paddleWidth, paddleHeight, gameWidth - paddleWidth, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
     paddle1.score = 0;
     paddle2.score = 0;
 
@@ -620,24 +609,20 @@ function resetGame(){
 };
 function reset4Players(){
     //set event listeners
-    if (paddle3.status == OFFLINE)
-    {
+    if (player1Bot == "false")
+        window.addEventListener("keydown", keyIsPressedPlayer1);
+    if (player2Bot == "false")
+        window.addEventListener("keydown", keyIsPressedPlayer2);
+    if (player3Bot == "false")
         window.addEventListener("keydown", keyIsPressedPlayer3);
-        paddle3.status = HUMAN;
-        player3Btn.textContent = `player 3 🧑`;
-    }
-    if (paddle4.status == OFFLINE)
-    {
+    if (player4Bot == "false")
         window.addEventListener("keydown", keyIsPressedPlayer4);
-        paddle4.status = HUMAN;
-        player4Btn.textContent = `player 4 🧑`;
-    }
 
     //set paddles
-    paddle1 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnTop, paddle1.status, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
-    paddle2 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnTop, paddle2.status, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
-    paddle3 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnBottom, paddle3.status, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
-    paddle4 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnBottom, paddle4.status, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
+    paddle1 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
+    paddle2 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
+    paddle3 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
+    paddle4 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
     paddle1.setPositionComparedWithAlly(TOP);
     paddle2.setPositionComparedWithAlly(TOP);
     paddle3.setPositionComparedWithAlly(BOTTOM);
@@ -739,70 +724,3 @@ function keyIsNotPressed(event){
         break;
     }
 };
-function switchPlayer1(event){
-    if (paddle1.status == HUMAN)
-    {
-        paddle1.status = IA;
-        event.target.textContent = "player 1 🤖";
-        window.removeEventListener("keydown", keyIsPressedPlayer1);
-        
-    }
-    else if (paddle1.status == IA)
-    {
-        paddle1.status = HUMAN;
-        event.target.textContent = "player 1 🧑";
-        window.addEventListener("keydown", keyIsPressedPlayer1);
-    }
-}
-function switchPlayer2(event){
-    if (paddle2.status == HUMAN)
-    {
-        paddle2.status = IA;
-        event.target.textContent = "player 2 🤖";
-        window.removeEventListener("keydown", keyIsPressedPlayer2);
-    }
-    else if (paddle2.status == IA)
-    {
-        paddle2.status = HUMAN;
-        event.target.textContent = "player 2 🧑";
-        window.addEventListener("keydown", keyIsPressedPlayer2);
-    }
-}
-function switchPlayer3(event){
-    if (paddle3.status == HUMAN)
-    {
-        paddle3.status = IA;
-        event.target.textContent = "player 3 🤖";
-        window.removeEventListener("keydown", keyIsPressedPlayer3);
-    }
-    else if (paddle3.status == IA)
-    {
-        paddle3.status = HUMAN;
-        event.target.textContent = "player 3 🧑";
-        window.addEventListener("keydown", keyIsPressedPlayer3);
-    }
-}
-function switchPlayer4(event){
-    if (paddle4.status == HUMAN)
-    {
-        paddle4.status = IA;
-        event.target.textContent = "player 4 🤖";
-        window.removeEventListener("keydown", keyIsPressedPlayer4);
-    }
-    else if (paddle4.status == IA)
-    {
-        paddle4.status = HUMAN;
-        event.target.textContent = "player 4 🧑";
-        window.addEventListener("keydown", keyIsPressedPlayer4);
-    }
-}
-function decreaseBallsCount(event){
-    if (ballNbr > 1)
-        ballNbr--;
-    ballsLbl.textContent = ballNbr;
-}
-function increaseBallsCount(event){
-    if (ballNbr < 20)
-        ballNbr++;
-    ballsLbl.textContent = ballNbr;
-}
