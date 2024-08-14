@@ -39,10 +39,16 @@ def start_local_game(request):
         elif request.POST.get('send') == '-' and nballs > 1:
             nballs -= 1
         elif request.POST.get('send') == 'PLAY':
-            return render(request, "index.html", {"page": "pong", "game": "on", "score": score, "nplayers": nplayers, "bot1": bot1, "bot2": bot2, "bot3": bot3, "bot4": bot4,"balls": nballs})
-    return render(request, "index.html", {"page": "pong", "game": "off", "score": score, "nplayers": nplayers, "bot1": bot1, "bot2": bot2, "bot3": bot3, "bot4": bot4, "balls": nballs})
+            return render(request, "index.html", {"page": "pong_local", "game": "on", "score": score, "nplayers": nplayers, "bot1": bot1, "bot2": bot2, "bot3": bot3, "bot4": bot4,"balls": nballs})
+    return render(request, "index.html", {"page": "pong_local", "game": "off", "score": score, "nplayers": nplayers, "bot1": bot1, "bot2": bot2, "bot3": bot3, "bot4": bot4, "balls": nballs})
 
 
 @login_required
 def start_tournament(request):
-    return render(request, "index.html", {"page": "pong_tournament"})
+    n = 2
+    players = ["player1", "player2"]
+    if request.method == 'POST':
+        if request.POST.get('play'):
+            return render(request, "index.html", {"page": "pong_tournament", "game": "on"})
+
+    return render(request, "index.html", {"page": "pong_tournament", "game": "off", "number": n, "players": players})

@@ -75,7 +75,7 @@ def show_profile(request):
     bbm_games = Bomberman.objects.all().filter(Q(winner_id = user_id) | Q(loser_id = user_id)).count()
     bbm_victories = Bomberman.objects.all().filter(winner_id = user_id, winner_score = 1).count()
     bbm_defeats = Bomberman.objects.all().filter(loser_id = user_id, winner_score = 1).count()
-    bbm_draws = Bomberman.objects.all().filter(Q(winner_id = user_id) | Q(loser = user_id), winner_score = 0, loser_score = 0).count()
+    bbm_draws = Bomberman.objects.all().filter(Q(winner_id = user_id) | Q(loser_id = user_id), winner_score = 0, loser_score = 0).count()
 
     games = Pong.objects.all().filter(Q(winner_id = user_id) | Q(loser_id = user_id)).count()
     victories = Pong.objects.all().filter(winner_id = user_id).count()

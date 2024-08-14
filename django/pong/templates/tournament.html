@@ -1,1 +1,95 @@
-<h1>PONG tournament by acometLeBigNoob</h1>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'pong_style.css' %}">
+
+<p id="back"><a href="{% url 'selection' %}"><< back</a></p>
+
+{% if game == "off" %}
+
+    <!-- subscribe form for players (number and username) -->
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- input submit not visible to send form when Enter is pressed -->
+        <input style="display: none;" id="validate" type="submit" value="PLAY" name="play">
+
+        <p>
+            <label for="nplayers">Number of players:</label>
+            <input type="submit" value="-" name="less">
+            <input name="players_number" id="nplayers" type="number" value="{{ number }}" readonly>
+            <input type="submit" value="+" name="more">
+        </p>
+
+        <p id="username_list">
+            {% for player in players %}
+                <input type="text" name="names" value="{{ player }}" required maxlength="15">
+            {% endfor %}
+        </p>
+
+        <input type="submit" value="PLAY" name="play">
+        <p style="color: red;">{{ error }}</p>
+    </form>
+
+{% elif game == "begin" %}
+
+    <!-- display who is playing against whom  -->
+
+    <form method="post">
+        {% csrf_token %}
+        <p id="playersName">{{ name1 }} vs {{ name2 }}</p>
+        <br>
+        <input type="submit" value="PLAY">
+    </form>
+
+    <form id="cancelTournament" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Cancel" name="cancel">
+    </form>
+
+{% elif game == "on" %}
+
+    <!-- Game is running with default settings -->
+
+    <div id="gameContainer">
+        <canvas id="gameBoard" width="1000" height="500"></canvas>
+        <div id="scoreText">0 : 0</div>
+    </div>
+
+    <!-- "1v1" -->
+    <script id="nplayers" type="application/json">"1v1"</script>
+
+    <!-- False -->
+    <script id="bot1" type="application/json">false</script>
+    <script id="bot2" type="application/json">false</script>
+    <script id="bot3" type="application/json">false</script>
+    <script id="bot4" type="application/json">false</script>
+
+    <!-- int entre 1 - 100 -->
+    <script id="balls" type="application/json">1</script>
+    <script id="score" type="application/json">3</script>
+
+    <!-- form for js to send winner name to python -->
+    <form style="display: none;" id="winnerForm" method="post">
+        {% csrf_token %}
+        <input type="text" id="winner" name="winner">
+        <input type="submit" id="result" name="result" value="result">
+    </form>
+
+    <script src="{% static 'index.js' %}"></script>
+
+{% else %}
+
+    <!-- annouce winner -->
+
+    {% if winner %}
+
+    <h1>The winner is {{ winner }}</h1>
+
+    {% else %}
+
+    <h1>Nobody won :(</h1>
+
+    {% endif %}
+
+{% endif %}

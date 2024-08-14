@@ -13,8 +13,8 @@ const ballsLbl = document.getElementById("ballsLbl");
 const increaseBalls = document.getElementById("increaseBalls");
 
 //gameBoard
-const gameWidth = 1000;
-const gameHeight = 500;
+const gameWidth = 1500;
+const gameHeight = 800;
 gameBoard.width = gameWidth;
 gameBoard.height = gameHeight;
 const boardBackground = "white";
@@ -109,8 +109,10 @@ const paddle4up = 33;
 let keys = [];
 
 //set events
-resetBtn.addEventListener("click", resetGame);
-reset4PlayersBtn.addEventListener("click", reset4Players);
+if (resetBtn)
+    resetBtn.addEventListener("click", resetGame);
+if (reset4PlayersBtn)
+    reset4PlayersBtn.addEventListener("click", reset4Players);
 window.addEventListener("keyup", keyIsNotPressed);
 
 //settings players and IA
@@ -144,6 +146,13 @@ function nextTick(balls, fakeballs){
         }
         if (!gameIsFinished)
             nextTick(balls, fakeballs);
+        else
+        {
+            let text = "END";
+            context.fillStyle = "red";
+            context.font = "75px comic sans";
+            context.fillText(text, gameBoard.width / 4, gameBoard.height / 2);
+        }
     }, 10)
 };
 function drawPaddles(){
