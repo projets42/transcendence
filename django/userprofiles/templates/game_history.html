@@ -51,18 +51,18 @@
     <p>
         {{ game.date | date:"m/d/y g:i a" }}<br>
 
-        {% if game.winner_id == -1 %}
-            {{ game.winner }}
-        {% else %}
+        {% if game.winner_id == user.id %}
             {{ user.username }}
+        {% else %}
+            {{ game.winner }}
         {% endif %}
 
         {{ game.winner_score }} - {{ game.loser_score }}
 
-        {% if game.loser_id == -1 %}
-            {{ game.loser }}
-        {% else %}
+        {% if game.loser_id == user.id %}
             {{ user.username }}
+        {% else %}
+            {{ game.loser }}
         {% endif %}
     </p>
 
