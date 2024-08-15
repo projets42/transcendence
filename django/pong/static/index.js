@@ -3,7 +3,6 @@ const gameBoard = document.getElementById("gameBoard");
 const context = gameBoard.getContext("2d");
 const scoreText = document.getElementById("scoreText");
 const resetBtn = document.getElementById("resetBtn");
-const reset4PlayersBtn = document.getElementById("reset4PlayersBtn");
 const player1Btn = document.getElementById("player1Btn");
 const player2Btn = document.getElementById("player2Btn");
 const player3Btn = document.getElementById("player3Btn");
@@ -13,8 +12,8 @@ const ballsLbl = document.getElementById("ballsLbl");
 const increaseBalls = document.getElementById("increaseBalls");
 
 //gameBoard
-const gameWidth = 1500;
-const gameHeight = 800;
+const gameWidth = 1000;
+const gameHeight = 500;
 gameBoard.width = gameWidth;
 gameBoard.height = gameHeight;
 const boardBackground = "white";
@@ -109,16 +108,13 @@ const paddle4up = 33;
 let keys = [];
 
 //set events
-if (resetBtn)
-    resetBtn.addEventListener("click", resetGame);
-if (reset4PlayersBtn)
-    reset4PlayersBtn.addEventListener("click", reset4Players);
 window.addEventListener("keyup", keyIsNotPressed);
 
 //settings players and IA
 let time = -1000;
 
 
+//choose player number
 if (nbrPlayers == "\"1v1\"")
     resetGame();
 else if (nbrPlayers == "\"2v2\"")
@@ -146,13 +142,6 @@ function nextTick(balls, fakeballs){
         }
         if (!gameIsFinished)
             nextTick(balls, fakeballs);
-        else
-        {
-            let text = "END";
-            context.fillStyle = "red";
-            context.font = "75px comic sans";
-            context.fillText(text, gameBoard.width / 4, gameBoard.height / 2);
-        }
     }, 10)
 };
 function drawPaddles(){
@@ -356,6 +345,40 @@ function updateScore(){
     {
         clearInterval(intervalID);
         gameIsFinished = true;
+        clearBoard();
+        if (document.getElementById("winnerForm"))
+        {
+            if (paddle1.score > paddle2.score)
+            {
+                document.getElementById("winner").value = "player1";
+                document.getElementById("loserScore").value = paddle2.score;
+                document.getElementById("result").click();
+            }
+            else
+            {
+                document.getElementById("winner").value = "player2";
+                document.getElementById("loserScore").value = paddle1.score;
+                document.getElementById("result").click();
+            }
+        }
+        else
+        {
+            if (nbrPlayers == "\"1v1\"")
+                resetBtn.addEventListener("click", resetGame);
+            else if (nbrPlayers == "\"2v2\"")
+            {
+                resetBtn.addEventListener("click", reset4Players);
+                drawPaddles4Players();
+            }
+            resetBtn.style.display ="block";
+        }
+        context.fillStyle = "tomato";
+        context.font = "75px comic sans";
+        if (paddle1.score > paddle2.score)
+            context.fillText("Left Team WIN!", gameWidth / 4, gameHeight / 2);
+        else
+            context.fillText("Right Team WIN!", gameWidth / 4, gameHeight / 2);
+        drawPaddles();
     }
 };
 
@@ -587,6 +610,10 @@ function checkCollision4Players(ball, fakeball){
 
 //reset functions
 function resetGame(){
+    //remove reset bouton
+    resetBtn.removeEventListener("click", resetGame);
+    resetBtn.style.display ="none";
+
     //set event listeners
     if (player1Bot == "false")
         window.addEventListener("keydown", keyIsPressedPlayer1);
@@ -617,6 +644,10 @@ function resetGame(){
     gameStart(balls, fakeballs);
 };
 function reset4Players(){
+    //remove reset bouton
+    resetBtn.removeEventListener("click", reset4Players);
+    resetBtn.style.display ="none";
+
     //set event listeners
     if (player1Bot == "false")
         window.addEventListener("keydown", keyIsPressedPlayer1);

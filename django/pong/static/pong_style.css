@@ -40,3 +40,8 @@
     text-decoration: none;
     color: white;
 }
+
+#resetBtn{
+    display: none;
+    align-items: center;
+}
