@@ -2,6 +2,17 @@
 
 <link rel="stylesheet" href="{% static 'pong_style.css' %}">
 
+<style>
+
+    #username_list{
+        display: flex;
+        flex-direction: column;
+        height: 25vh;
+        overflow: auto;
+    }
+
+</style>
+
 <p id="back"><a href="{% url 'selection' %}"><< back</a></p>
 
 {% if game == "off" %}
@@ -12,13 +23,13 @@
         {% csrf_token %}
 
         <!-- input submit not visible to send form when Enter is pressed -->
-        <input style="display: none;" id="validate" type="submit" value="PLAY" name="play">
+        <input style="display: none;" id="validate" type="submit" value="PLAY" name="subscribeForm">
 
         <p>
             <label for="nplayers">Number of players:</label>
-            <input type="submit" value="-" name="less">
+            <input type="submit" value="-" name="subscribeForm">
             <input name="players_number" id="nplayers" type="number" value="{{ number }}" readonly>
-            <input type="submit" value="+" name="more">
+            <input type="submit" value="+" name="subscribeForm">
         </p>
 
         <p id="username_list">
@@ -27,7 +38,7 @@
             {% endfor %}
         </p>
 
-        <input type="submit" value="PLAY" name="play">
+        <input type="submit" value="PLAY" name="subscribeForm">
         <p style="color: red;">{{ error }}</p>
     </form>
 
@@ -37,9 +48,13 @@
 
     <form method="post">
         {% csrf_token %}
-        <p id="playersName">{{ name1 }} vs {{ name2 }}</p>
+        <p id="playersName">
+            Player 1 : {{ name1 }}<br>
+            vs<br>
+            Player 2 : {{ name2 }}<br>
+        </p>
         <br>
-        <input type="submit" value="PLAY">
+        <input type="submit" value="PLAY" name="playGame">
     </form>
 
     <form id="cancelTournament" method="post">
@@ -73,6 +88,7 @@
     <form style="display: none;" id="winnerForm" method="post">
         {% csrf_token %}
         <input type="text" id="winner" name="winner">
+        <input type="number" id="loserScore" name="loserScore">
         <input type="submit" id="result" name="result" value="result">
     </form>
 

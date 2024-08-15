@@ -91,11 +91,11 @@ def end_game(request, user_id):
     if (user2):
         id2 = user2[0].id
     if request.POST["winner"] == "none":
-        bombergame = Bomberman.objects.create(winner = pastGame.player1, loser = pastGame.player2, winner_id = id1, loser_id = id2)
+        Bomberman.objects.create(winner = pastGame.player1, loser = pastGame.player2, winner_id = id1, loser_id = id2)
     elif request.POST["winner"] == "player1":
-        bombergame = Bomberman.objects.create(winner = pastGame.player1, loser = pastGame.player2, winner_score = 1, winner_id = id1, loser_id = id2)
+        Bomberman.objects.create(winner = pastGame.player1, loser = pastGame.player2, winner_score = 1, winner_id = id1, loser_id = id2)
     else:
-        bombergame = Bomberman.objects.create(winner = pastGame.player2, loser = pastGame.player1, winner_score = 1, winner_id = id2, loser_id = id1)
+        Bomberman.objects.create(winner = pastGame.player2, loser = pastGame.player1, winner_score = 1, winner_id = id2, loser_id = id1)
     if games.count():
         return render(request, "index.html", {"page": "bomberman", "game": "off", "form": form, "name1": games[0].player1, "name2": games[0].player2})
 
