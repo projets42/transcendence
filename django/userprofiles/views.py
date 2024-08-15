@@ -126,14 +126,14 @@ def pong_games(request):
 @login_required
 def pong_victories(request):
     user_id = request.user.id
-    games = Pong.objects.all().filter(winner_id = user_id, winner_score = 1)
+    games = Pong.objects.all().filter(winner_id = user_id)
     return render(request, "index.html", {"page": "pong_games", "game_name": "Pong", "title": "victories", "games": games})
 
 
 @login_required
 def pong_defeats(request):
     user_id = request.user.id
-    games = Pong.objects.all().filter(loser_id = user_id, winner_score = 1)
+    games = Pong.objects.all().filter(loser_id = user_id)
     return render(request, "index.html", {"page": "pong_games", "game_name": "Pong", "title": "defeats", "games": games})
 
 

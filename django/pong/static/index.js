@@ -348,18 +348,19 @@ function updateScore(){
         clearBoard();
         if (document.getElementById("winnerForm"))
         {
-            if (paddle1.score > paddle2.score)
-            {
-                document.getElementById("winner").value = "player1";
-                document.getElementById("loserScore").value = paddle2.score;
+            setTimeout(() => {
+                if (paddle1.score > paddle2.score)
+                {
+                    document.getElementById("winner").value = "player1";
+                    document.getElementById("loserScore").value = paddle2.score;
+                }
+                else
+                {
+                    document.getElementById("winner").value = "player2";
+                    document.getElementById("loserScore").value = paddle1.score;
+                }
                 document.getElementById("result").click();
-            }
-            else
-            {
-                document.getElementById("winner").value = "player2";
-                document.getElementById("loserScore").value = paddle1.score;
-                document.getElementById("result").click();
-            }
+            }, 3000);
         }
         else
         {
