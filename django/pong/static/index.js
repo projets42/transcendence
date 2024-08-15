@@ -611,8 +611,11 @@ function checkCollision4Players(ball, fakeball){
 //reset functions
 function resetGame(){
     //remove reset bouton
-    resetBtn.removeEventListener("click", resetGame);
-    resetBtn.style.display ="none";
+    if (document.getElementById('resetBtn'))
+    {
+        resetBtn.removeEventListener("click", resetGame);
+        resetBtn.style.display ="none";
+    }
 
     //set event listeners
     if (player1Bot == "false")
@@ -645,8 +648,11 @@ function resetGame(){
 };
 function reset4Players(){
     //remove reset bouton
-    resetBtn.removeEventListener("click", reset4Players);
-    resetBtn.style.display ="none";
+    if (document.getElementById('resetBtn'))
+    {
+        resetBtn.removeEventListener("click", reset4Players);
+        resetBtn.style.display ="none";
+    }
 
     //set event listeners
     if (player1Bot == "false")
