@@ -39,7 +39,7 @@ const paddleColor = "white";
 const paddleSpeed = 10;
 const paddleWidth = 25;
 const paddleHeight = 100;
-const paddleHeight4Players = 70;
+const paddleHeight4Players = 80;
 const paddleSpawn = (gameHeight - paddleHeight) / 2;
 const paddleSpawnTop = Math.floor((gameHeight - paddleHeight4Players) / 4 / 10) * 10;
 const paddleSpawnBottom = Math.floor((gameHeight - paddleHeight4Players) * 3 / 4 / 10) * 10;
@@ -67,8 +67,9 @@ let paddle4 = new Paddle(0, 0, 0, 0);
 const ballColor = "orange";
 //const ballBorder = "black";
 const ballRadius = 10;
-const ballInitialSpeed = 2.2;
-const ballIncr = 0.2;
+const ballInitialSpeed = 4;
+const ballIncr = 2;
+const maxSpeed = 10000;
 // 100 put y axe incr at -1 to 1 
 const ballFov = 90 / 100 * 2;
 let ballSpawnX = gameWidth / 2;
@@ -136,9 +137,21 @@ function nextTick(balls, fakeballs){
         drawPaddles();
         for(let i = 0; i < balls.length; i++)
         {
-            moveBall(balls[i]);
+            // check collision by step of size ballradius
+            balls[i].step = Math.ceil(balls[i].speed / ballRadius);
+            balls[i].xIncr = balls[i].xDirection / balls[i].step;
+            balls[i].yIncr = balls[i].yDirection / balls[i].step;
+            let goal = paddle1.score + paddle2.score;
+            let currentBallSpeed = balls[i].speed
+            for(let j = 0; j < balls[i].step; j++)
+            {
+                moveBall(balls[i]);
+                checkCollision(balls[i], fakeballs[i], currentBallSpeed);
+                // terminate if goal scored
+                if (goal < paddle1.score + paddle2.score)
+                    break;
+            }
             drawBall(balls[i]);
-            checkCollision(balls[i], fakeballs[i]);
         }
         if (!gameIsFinished)
             nextTick(balls, fakeballs);
@@ -167,8 +180,8 @@ function drawBall(ball){
     context.fill();
 };
 function moveBall(ball){
-    ball.x += (ball.speed * ball.xDirection);
-    ball.y += (ball.speed * ball.yDirection);
+    ball.x += ball.xIncr;
+    ball.y += ball.yIncr;
 };
 function movePaddles(balls, fakeballs){
     // human paddles
@@ -187,6 +200,7 @@ function movePaddles(balls, fakeballs){
     {
         for (let i = 0; i < balls.length; i++)
             checkBallDestination(balls[i], fakeballs[i], paddleHeight);
+        time = Date.now();
     }
 
     if (player1Bot == "true")
@@ -196,19 +210,28 @@ function movePaddles(balls, fakeballs){
 };
 function checkBallDestination(ball, fakeball, currentpaddleheight)
 {
-    time = Date.now();
     fakeball.setValues(ball.speed, ball.x, ball.y, ball.xDirection, ball.yDirection);
     let check = fakeball.xDirection;
     fakeball.arrivalTime = 0
     while (fakeball.xDirection * check >= 0)
     {
-        moveBall(fakeball);
-        checkCollisionFakeBall(fakeball);
+        // check collision by step of size ballradius
+        fakeball.step = Math.ceil(fakeball.speed / ballRadius);
+        fakeball.xIncr = fakeball.xDirection / fakeball.step;
+        fakeball.yIncr = fakeball.yDirection / fakeball.step;
+        for(let j = 0; j < fakeball.step; j++)
+        {
+            moveBall(fakeball);
+            checkCollisionFakeBall(fakeball);
+            // terminate if goal scored
+            if (fakeball.xDirection * check <= 0)
+                break;
+        }
         fakeball.arrivalTime++;
     }
 
     // value rounded where ia will move to with angle variant
-    fakeball.y = Math.round(fakeball.y / paddleSpeed) * paddleSpeed + ((Math.round(Math.random()) - 0.5) * (currentpaddleheight - paddleSpeed * 4));
+    fakeball.y = (Math.round((fakeball.y + (Math.random() * (currentpaddleheight - paddleSpeed)) - ((currentpaddleheight - paddleSpeed) / 2) ) / paddleSpeed) * paddleSpeed);
 }
 function checkCollisionFakeBall(fakeball){
     //ball bounced top and down
@@ -216,11 +239,15 @@ function checkCollisionFakeBall(fakeball){
     {
         if (fakeball.yDirection < 0)
             fakeball.yDirection *= -1;
+        if (fakeball.yIncr < 0)
+            fakeball.yIncr *= -1
     }
     else if (fakeball.y >= gameHeight - ballRadius)
     {
         if (fakeball.yDirection > 0)
             fakeball.yDirection *= -1;
+        if (fakeball.yIncr > 0)
+            fakeball.yIncr *= -1
     }
 
     //ball score
@@ -270,7 +297,7 @@ function movePaddlesIA(fakeballs, paddle)
 
 
     // position paddle
-    if (targetball.ignore == true || (targetball.xDirection > 0 && paddle.x) || (targetball.xDirection < 0 && !paddle.x) || ((Math.abs(paddle.y - targetball.y) / paddleSpeed) > targetball.arrivalTime))
+    if (targetball.ignore == true || (targetball.xDirection > 0 && paddle.x) || (targetball.xDirection < 0 && !paddle.x))
     {
         // go middle court (stand by)
         if (paddle.y < (gameHeight - paddle.height) / 2)
@@ -287,17 +314,21 @@ function movePaddlesIA(fakeballs, paddle)
             paddle.y += paddleSpeed;
     }
 }
-function checkCollision(ball, fakeball){
+function checkCollision(ball, fakeball, currentBallSpeed){
     //ball bounced top and down
     if (ball.y <= 0 + ballRadius)
     {
         if (ball.yDirection < 0)
             ball.yDirection *= -1;
+        if (ball.yIncr < 0)
+            ball.yIncr *= -1
     }
     else if (ball.y >= gameHeight - ballRadius)
     {
         if (ball.yDirection > 0)
             ball.yDirection *= -1;
+        if (ball.yIncr > 0)
+            ball.yIncr *= -1
     }
             
     //ball score
@@ -319,20 +350,27 @@ function checkCollision(ball, fakeball){
     //ball bounced paddle
     if (ball.x <= (paddle1.x + paddle1.width + ballRadius)){
         if (ball.y >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
-            ball.speed += ballIncr;
+            if (ball.speed < maxSpeed && ball.xDirection < 0)
+                ball.speed += ballIncr;
             ball.x = paddle1.x + paddle1.width + ballRadius;
-            ball.yDirection = (((ball.y - paddle1.y) / paddle1.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
+            ball.yDirection = (((ball.y - paddle1.y) / paddle1.height) -0.5) * ballFov * currentBallSpeed;
+            ball.xDirection = Math.sqrt((currentBallSpeed ** 2) - (ball.yDirection ** 2));
             fakeball.ignore = true;
+            ball.xIncr = ball.xDirection / ball.step;
+            ball.yIncr = ball.yDirection / ball.step;
         }
     }
     else if (ball.x >= (paddle2.x - ballRadius)){
         if (ball.y >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
-            ball.speed += ballIncr;
+            if (ball.speed < maxSpeed && ball.xDirection > 0)
+                ball.speed += ballIncr;
             ball.x = paddle2.x - ballRadius;
-            ball.yDirection = (((ball.y - paddle2.y) / paddle2.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = -Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
+            ball.yDirection = (((ball.y - paddle2.y) / paddle2.height) -0.5) * ballFov * currentBallSpeed;
+            ball.xDirection = -Math.sqrt((currentBallSpeed ** 2) - (ball.yDirection ** 2));
             fakeball.ignore = true;
+            ball.xIncr = ball.xDirection / ball.step;
+            ball.yIncr = ball.yDirection / ball.step;
+
         }
     }
 };
@@ -402,9 +440,21 @@ function nextTick4Players(balls, fakeballs){
         drawPaddles4Players();
         for(let i = 0; i < balls.length; i++)
         {
-            moveBall(balls[i]);
+            // check collision by step of size ballradius
+            balls[i].step = Math.ceil(balls[i].speed / ballRadius);
+            balls[i].xIncr = balls[i].xDirection / balls[i].step;
+            balls[i].yIncr = balls[i].yDirection / balls[i].step;
+            let goal = paddle1.score + paddle2.score;
+            let currentBallSpeed = balls[i].speed
+            for(let j = 0; j < balls[i].step; j++)
+            {
+                moveBall(balls[i]);
+                checkCollision4Players(balls[i], fakeballs[i], currentBallSpeed);
+                // terminate if goal scored
+                if (goal < paddle1.score + paddle2.score)
+                    break;
+            }
             drawBall(balls[i]);
-            checkCollision4Players(balls[i], fakeballs[i]);
         }
         if (!gameIsFinished)
             nextTick4Players(balls, fakeballs);
@@ -539,17 +589,21 @@ function movePaddleToSpawn(spawn, paddle, paddleally){
             paddleally.y += paddleSpeed;
     }
 }
-function checkCollision4Players(ball, fakeball){
+function checkCollision4Players(ball, fakeball, currentBallSpeed){
     //ball bounced top and down
     if (ball.y <= 0 + ballRadius)
     {
         if (ball.yDirection < 0)
             ball.yDirection *= -1;
+        if (ball.yIncr < 0)
+            ball.yIncr *= -1
     }
     else if (ball.y >= gameHeight - ballRadius)
     {
         if (ball.yDirection > 0)
             ball.yDirection *= -1;
+        if (ball.yIncr > 0)
+            ball.yIncr *= -1
     }
     
     //ball score
@@ -574,38 +628,42 @@ function checkCollision4Players(ball, fakeball){
     if (ball.x <= (paddle1.x + paddle1.width + ballRadius))
     {
         if (ball.y >= paddle1.y && ball.y <= paddle1.y + paddle1.height){
-            ball.speed += ballIncr;
-            ball.x = paddle1.x + paddle1.width + ballRadius;
-            ball.yDirection = (((ball.y - paddle1.y) / paddle1.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
-            fakeball.ignore = true;
+            ballBouncePaddleLeft(ball, fakeball, currentBallSpeed, paddle1);
         }
         else if(ball.y >= paddle3.y && ball.y <= paddle3.y + paddle3.height){
-            ball.speed += ballIncr;
-            ball.x = paddle3.x + paddle3.width + ballRadius;
-            ball.yDirection = (((ball.y - paddle3.y) / paddle3.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
-            fakeball.ignore = true;
+            ballBouncePaddleLeft(ball, fakeball, currentBallSpeed, paddle3);
         }
     }
     else if (ball.x >= (paddle2.x - ballRadius))
     {
         if (ball.y >= paddle2.y && ball.y <= paddle2.y + paddle2.height){
-            ball.speed += ballIncr;
-            ball.x = paddle2.x - ballRadius;
-            ball.yDirection = (((ball.y - paddle2.y) / paddle2.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = -Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
-            fakeball.ignore = true;
+            ballBouncePaddleRight(ball, fakeball, currentBallSpeed, paddle2)
         }
         else if (ball.y >= paddle4.y && ball.y <= paddle4.y + paddle4.height){
-            ball.speed += ballIncr;
-            ball.x = paddle4.x - ballRadius;
-            ball.yDirection = (((ball.y - paddle4.y) / paddle4.height) -0.5) * ballFov * ball.speed;
-            ball.xDirection = -Math.sqrt((ball.speed ** 2) - (ball.yDirection ** 2));
-            fakeball.ignore = true;
+            ballBouncePaddleRight(ball, fakeball, currentBallSpeed, paddle4)
         }
     }
 };
+function ballBouncePaddleLeft(ball, fakeball, currentBallSpeed, paddle){
+    if (ball.speed < maxSpeed && ball.xDirection < 0)
+        ball.speed += ballIncr;
+    ball.x = paddle.x + paddle.width + ballRadius;
+    ball.yDirection = (((ball.y - paddle.y) / paddle.height) -0.5) * ballFov * currentBallSpeed;
+    ball.xDirection = Math.sqrt((currentBallSpeed ** 2) - (ball.yDirection ** 2));
+    fakeball.ignore = true;
+    ball.xIncr = ball.xDirection / ball.step;
+    ball.yIncr = ball.yDirection / ball.step;
+}
+function ballBouncePaddleRight(ball, fakeball, currentBallSpeed, paddle){
+    if (ball.speed < maxSpeed && ball.xDirection > 0)
+        ball.speed += ballIncr;
+    ball.x = paddle.x - ballRadius;
+    ball.yDirection = (((ball.y - paddle.y) / paddle.height) -0.5) * ballFov * currentBallSpeed;
+    ball.xDirection = -Math.sqrt((currentBallSpeed ** 2) - (ball.yDirection ** 2));
+    fakeball.ignore = true;
+    ball.xIncr = ball.xDirection / ball.step;
+    ball.yIncr = ball.yDirection / ball.step;
+}
 
 
 
