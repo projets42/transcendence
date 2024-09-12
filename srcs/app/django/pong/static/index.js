@@ -447,10 +447,26 @@ function updateScore(){
                 document.getElementById("result").click();
             }, 1000);
         }
-        else
+        else if (document.getElementById("winnerFormLocal"))
         {
-            if (nbrPlayers == "\"1v1\"")
-                resetBtn.addEventListener("click", resetGame);
+            if (nbrPlayers == "\"1v1\""){
+                setTimeout(() => {
+                    resetBtn.addEventListener("click", resetGame);
+                    if (paddle1.score > paddle2.score)
+                    {
+                        document.getElementById("winner").value = "player1";
+                        document.getElementById("winnerScore").value = paddle1.score;
+                        document.getElementById("loserScore").value = paddle2.score;
+                    }
+                    else
+                    {
+                        document.getElementById("winner").value = "player2";
+                        document.getElementById("winnerScore").value = paddle2.score;
+                        document.getElementById("loserScore").value = paddle1.score;
+                    }
+                    document.getElementById("result").click();
+                }, 1000);
+            }
             else if (nbrPlayers == "\"2v2\"")
             {
                 resetBtn.addEventListener("click", reset4Players);
