@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', index, name = 'index'),
     path('play/', selection, name = 'selection'),
-    # path('admin/', admin.site.urls), TODO faire un design 404 pour les erreurs
+    # path('admin/', admin.site.urls),
     path('profiles/', include("userprofiles.urls")),
     path('pong/', include("pong.urls")),
     path('bomberman/', include("bomberman.urls")),

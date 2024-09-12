@@ -59,12 +59,12 @@ function changePage(page, formData=null, byArrow=false)
             }
             if (document.getElementById("playersList"))
                 initPlayerInput();
+            overloadSubmit();
         }
         else if (messagesDiv)
         {
             messagesDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
         }
-        overloadSubmit();
         loadGames();
         initValues();
     })
@@ -80,17 +80,6 @@ window.onpopstate = function (event)
 history.pushState({section: window.location.pathname}, "", window.location.pathname);
 
 let interval = window.setInterval(ping, 20000);
-
-// function ping()
-// {
-//     fetch(window.location.pathname, {
-//         method: 'PUT',
-//         headers: {
-//             'X-Requested-With': 'XMLHttpRequest',
-//             'X-CSRFToken': getCookie('csrftoken')
-//         }
-//     })
-// }
 
 async function ping() {
     try {

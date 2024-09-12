@@ -246,18 +246,18 @@ def friends(request):
         if request.POST.get('friend_name'):
             username = request.POST["friend_name"]
             user = User.objects.all().filter(username = username)
+            if not user:
+                return JsonResponse({"success": False, "message": "User not found"})
             if username == request.user.username:
                 return JsonResponse({"success": False, "message": "Are you that desperate ?"})
-            elif user:
-                friend = Friend.objects.all().filter(user = user[0], friend = request.user.id)
-                friendship = Friend.objects.all().filter(user = request.user, friend = user[0].id)
-                if friend | friendship:
-                    return JsonResponse({"success": False, "message": "Request was already sent"})
-                else:
-                    Friend.objects.create(user = user[0], friend = request.user.id)
-                    return JsonResponse({"success": False, "message": "Request has been sent"})
+            
+            friend = Friend.objects.all().filter(user = user[0], friend = request.user.id)
+            friendship = Friend.objects.all().filter(user = request.user, friend = user[0].id)
+            if friend | friendship:
+                return JsonResponse({"success": False, "message": "Request was already sent"})
             else:
-                return JsonResponse({"success": False, "message": "User not found"})
+                Friend.objects.create(user = user[0], friend = request.user.id)
+                return JsonResponse({"success": False, "message": "Request has been sent"})
 
         # display friend profile
         if request.POST.get('friend_id'):
