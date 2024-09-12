@@ -1,0 +1,50 @@
+{% load static %}
+
+<!-- Modal for changing username -->
+<div class="modal fade" id="changeUsernameModal" tabindex="-1" role="dialog" aria-labelledby="changeUsernameModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="changeUsernameModalLabel">Change Username</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="change-username-form" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="new-username">New Username</label>
+						<input type="text" class="form-control" id="new-username" name="username" value="{{ user.username }}" required>
+					</div>
+					<button type="submit" class="btn btn-primary">Save</button>
+				</form>
+				<div id="form-errors"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal for changing avatar -->
+<div class="modal fade" id="changeAvatarModal" tabindex="-1" role="dialog" aria-labelledby="changeAvatarModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="changeAvatarModalLabel">Change Avatar</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="change-avatar-form" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="picture">Profile Picture</label>
+						<input type="file" class="form-control-file" id="picture" name="picture" required>
+					</div>
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</form>
+				<div id="form-errors"></div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+
+<div class="neon-form">
+    <form method="post" action="/pong/tournament/">
+        {% csrf_token %}
+        <p id="playersName" class="neon-title text-center">{{ p1 }} vs {{ p2 }}</p>
+        <input style="display: none;" type="text" value="play" name="play">
+		<div class="text-center mt-4">
+			<input type="submit" value="PLAY" name="playGame" class="btn neon-btn neon-btn-play">
+		</div>
+    </form>
+
+	<form method="post" action="/pong/tournament/">
+		{% csrf_token %}
+		<input style="display: none;" type="text" value="cancel" name="cancel">
+		<button type="submit" value="Cancel" id="btn-return">CANCEL</button>
+	</form>
+</div>

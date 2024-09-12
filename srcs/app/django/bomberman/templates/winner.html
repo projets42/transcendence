@@ -1,0 +1,11 @@
+<div class="neon-form text-center">
+    {% if winner %}
+        <h1 class="neon-title text-center">The winner is {{ winner }}</h1>
+    {% else %}
+        <h1 class="neon-title text-center">Nobody won :(</h1>
+    {% endif %}
+    <div class="text-center mt-4"></div>
+		<button id="btn-return" onclick="changePage('/play/')">EXIT</button>
+		<button class="btn neon-btn neon-btn-play" onclick="changePage('/bomberman/')">Play Again</button>
+	</div>
+</div>

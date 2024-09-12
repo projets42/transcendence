@@ -1,0 +1,102 @@
+<style>
+    input[type="radio"] {
+        display: none;
+    }
+    .color-label {
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        display: inline-block;
+    }
+    .color-label.white {
+        background-color: white;
+        color: black;
+    }
+    .color-label.black {
+        background-color: black;
+    }
+    .color-label.red {
+        background-color: red;
+    }
+    .color-label.green {
+        background-color: green;}
+    .color-label.blue {
+        background-color: blue;
+    }
+    .color-label.yellow {
+        background-color: yellow;
+        color: black;
+    }
+    input[type="radio"]:checked + label {
+        border: 2px solid white;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+</style>
+
+<div id="error_messages" class="text-danger"></div>
+<form method="post" action="/bomberman/" name="colorSelection" class="neon-form p-4 rounded shadow-lg position-relative">
+    {% csrf_token %}
+
+    <h2 class="text-center neon-title">Color Selection</h2>
+    <p id="playersName" class="neon-text text-center">{{ p1 }} vs {{ p2 }}</p>
+
+    <div id="fields" class="text-center">
+        <div for="color1">{{ p1 }}</div>
+        <div class="radio-group text-center">
+            <input type="radio" id="color1-white" name="color1" value="white">
+            <label for="color1-white" class="color-label white">White</label>
+
+            <input type="radio" id="color1-black" name="color1" value="black">
+            <label for="color1-black" class="color-label black">Black</label>
+
+            <input type="radio" id="color1-red" name="color1" value="red">
+            <label for="color1-red" class="color-label red">Red</label>
+
+            <input type="radio" id="color1-green" name="color1" value="green">
+            <label for="color1-green" class="color-label green">Green</label>
+
+            <input type="radio" id="color1-blue" name="color1" value="blue">
+            <label for="color1-blue" class="color-label blue">Blue</label>
+
+            <input type="radio" id="color1-yellow" name="color1" value="yellow">
+            <label for="color1-yellow" class="color-label yellow">Yellow</label>
+        </div>
+
+        <div for="color2">{{ p2 }}</div>
+        <div class="radio-group text-center">
+            <input type="radio" id="color2-white" name="color2" value="white">
+            <label for="color2-white" class="color-label white">White</label>
+
+            <input type="radio" id="color2-black" name="color2" value="black">
+            <label for="color2-black" class="color-label black">Black</label>
+
+            <input type="radio" id="color2-red" name="color2" value="red">
+            <label for="color2-red" class="color-label red">Red</label>
+
+            <input type="radio" id="color2-green" name="color2" value="green">
+            <label for="color2-green" class="color-label green">Green</label>
+
+            <input type="radio" id="color2-blue" name="color2" value="blue">
+            <label for="color2-blue" class="color-label blue">Blue</label>
+
+            <input type="radio" id="color2-yellow" name="color2" value="yellow">
+            <label for="color2-yellow" class="color-label yellow">Yellow</label>
+        </div>
+    </div>
+    
+    <br>
+    <div class="text-center mt-4">
+        <input type="submit" value="PLAY" name="playGame" class="btn neon-btn neon-btn-play">
+    </div>
+</form>
+
+<div id="subcontent">
+    <form method="post" action="/bomberman/" class="neon-form p-4 rounded shadow-lg position-relative">
+        {% csrf_token %}
+        <input style="display: none;" type="text" value="cancel" name="cancel">
+		<button type="submit" value="Cancel" id="btn-return">CANCEL</button>
+    </form>
+</div>

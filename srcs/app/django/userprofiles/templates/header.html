@@ -1,0 +1,7 @@
+
+{% if user.is_authenticated %}
+    {% include 'userinfos.html' %}
+{% else %}
+    <a href="#" onclick="toggleLoginForm()">log in</a>
+    <a href="#" onclick="toggleSignupModal()">Sign Up</a>
+{% endif %}

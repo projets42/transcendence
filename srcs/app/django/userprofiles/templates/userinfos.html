@@ -1,0 +1,11 @@
+{% load static %}
+
+<div id="user-info" class="user-infos" style="text-align: center;">
+    {% if user.profileimg.picture %}
+        <img src="{{ user.profileimg.picture.url }}" width="70" height="70" style="border-radius:50%; display:block; margin:0 auto; box-shadow: 0 0 10px #08f;">
+    {% else %}
+        <img src="/media/images/default.png" width="70" height="70" style="border-radius:50%; display:block; margin:0 auto; box-shadow: 0 0 10px #08f;">
+    {% endif %}
+
+    <span class="neon-text">{{ user.username }}</span>
+</div>

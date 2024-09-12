@@ -1,0 +1,33 @@
+{% load static %}
+
+<div id="error_messages"></div>
+
+<form method="post" action="/pong/tournament/" class="neon-form p-4 rounded shadow-lg position-relative">
+
+	{% csrf_token %}
+
+	<h2 class="text-center neon-title">GAME SETUP</h2>
+
+    <div class="form-group">
+		<label for="nplayers" class="neon-label text-center">Number of players:</label>
+		<div class="d-flex align-items-center justify-content-center gap-2">
+			<button type="button" class="btn neon-btn" onclick="changeValue('-')">-</button>
+			<input id="nplayers" type="number" name="players_number" value="2" readonly class="form-control neon-input w-auto">
+			<button type="button" class="btn neon-btn" onclick="changeValue('+')">+</button>
+		</div>
+		<p class="player-keys mt-3">PLAYER 1: <span>W</span> / <span>S</span></p>
+        <p class="player-keys">PLAYER 2: <span>⇧</span> / <span>⇩</span></p>
+    </div>
+
+    <div id="playersList" class="text-center">
+        <input class="plst neon-input" type="text" name="names" value="player1" required maxlength="15">
+        <input class="plst neon-input" type="text" name="names" value="player2" required maxlength="15">
+    </div>
+
+	<div class="text-center mt-4">
+		<input type="submit" value="PLAY" class="btn neon-btn neon-btn-play" onclick="submitSubscriptionForm()">
+	</div>
+
+</form>
+
+<button id="btn-return" onclick="changePage('/play/')">BACK</button>

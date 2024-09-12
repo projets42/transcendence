@@ -1,0 +1,7 @@
+{% load static %}
+<form id="change-username-form" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<div id="form-errors"></div>

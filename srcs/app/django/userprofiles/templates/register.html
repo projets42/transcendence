@@ -1,0 +1,89 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'form_style.css' %}">
+
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Create Your Account</h5>
+                <button type="button" class="close custom-close-button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body custom-modal-body">
+                <div id="messages"></div>
+
+                <form id="registerForm" method="post" enctype="multipart/form-data" action="{% url 'userprofiles:register' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_username">Username</label>
+                        <input type="text" class="form-control" id="id_username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password1">Password</label>
+                        <input type="password" class="form-control" id="id_password1" name="password1" required>
+                        <small class="form-text text-muted">
+                            Your password must contain at least 8 characters, can't be too similar to your personal information, can't be a commonly used password, and can't be entirely numeric.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password2">Confirm Password</label>
+                        <input type="password" class="form-control" id="id_password2" name="password2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_picture">Profile Picture</label>
+                        <input type="file" class="form-control-file" id="id_picture" name="picture">
+                    </div>
+                    <button type="submit" class="btn btn-primary custom-button btn-block">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* Adds an event listener for the submit event of the form with the "registerForm" ID. 
+    This means that every time the form is submitted, this function is executed. */
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); /* Prevents the default behavior of form submission (page reload). */
+
+        /* Uses the fetch API to send an asynchronous HTTP request. "this.action" is the URL defined in the form's action attribute. */
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this), // creates a FormData object with the form data.
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // indicates that the request is sent via AJAX.
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // Add a header for the CSRF token, needed to protect Django forms against CSRF attacks.
+            },
+        })
+        .then(response => response.json()) // Processes the fetch request response, converting it to JSON object.
+
+        /* Once the JSON data has been received, the script uses it to update the user interface. */
+        .then(data => {
+            const messagesDiv = document.getElementById('messages'); // Gets a reference to the <div> with the 'message' ID
+            messagesDiv.innerHTML = ''; // Clear previous messages
+
+            if (data.success) {
+                messagesDiv.innerHTML = '<div class="alert alert-success">Account created successfully! You can now log in</div>';
+                document.getElementById('registerForm').reset();
+                setTimeout(() => {
+                    messagesDiv.innerHTML = '';
+                    $('#signupModal').modal('hide');
+                }, 2000); // Close modal after 2 seconds
+            } else {
+                for (let field in data.errors) {
+                    messagesDiv.innerHTML += `<div class="alert alert-danger">${data.errors[field].join(', ')}</div>`;
+                }
+            }
+        })
+
+        /* catches and displays potential errors that may occur during execution of the fetch request, such as network problems or other unexpected errors. */
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+</script>
+
+

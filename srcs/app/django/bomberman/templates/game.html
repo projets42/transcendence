@@ -1,0 +1,42 @@
+{% load static %}
+
+<style>
+    body{background-color: black; color: white;}
+
+	canvas {
+		position:relative;
+		top: 40px;
+		width: 100%;
+		height: 100%;
+		margin-bottom: 20px;
+		z-index: 0;
+	}
+
+	#game_container {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+		margin-top: 50px;
+	}
+
+	#game {
+    width: 750px;
+    height: 750px;
+}
+</style>
+
+<div id="game_container">
+    <canvas id="game"></canvas>
+	<button id="btn-return" class="mt-4 mb-3" onclick="changePage('/bomberman/')">Exit</button>
+</div>
+
+{{ color1 | json_script:"color1" }}
+{{ color2 | json_script:"color2" }}
+
+<form style="display: none;" method="post" action="/bomberman/">
+    {% csrf_token %}
+    <input type="text" id="winner" name="winner">
+    <input type="submit" id="result" value="result">
+</form>

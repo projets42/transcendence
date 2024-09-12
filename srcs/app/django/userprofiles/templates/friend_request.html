@@ -1,0 +1,141 @@
+{% load static %}
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #000000;
+        color: #d3d4d6;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h2 {
+        color: #ffffff;
+        font-size: 2rem;
+        text-shadow: 0 0 10px var(--neon-text-color), 0 0 15px var(--neon-text-color);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .user-info, .friend-requests {
+        border: 2px solid #333;
+        padding: 2rem;
+        border-radius: 12px;
+        background-color: #101010;
+        margin-bottom: 2rem;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .profile-img {
+        border-radius: 50%;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 0 10px #f0f;
+    }
+
+    .friend-requests p {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .friend-requests form {
+        display: inline-block;
+        margin: 0 0.5rem;
+    }
+
+    input[type="submit"] {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        background-color: #282828;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: background-color 0.3s ease, transform 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #ff4081;
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
+    }
+
+    /* Neon effect on the title and user info */
+    .neon-text-purple {
+        color: #ffffff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #f0f, 0 0 15px #f0f, 0 0 20px #f0f;
+    }
+
+    .friend-requests form input[type="submit"] {
+        background-color: transparent;
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .friend-requests form input[type="submit"]:hover {
+        background-color: #ff4081;
+        border-color: #ff4081;
+        color: black;
+        transform: translateY(-3px);
+        box-shadow: 0 0 10px #ff4081, 0 0 15px #ff4081;
+    }
+
+    .friend-requests {
+        background-color: #1a1a1a;
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .friend-requests h2 {
+        margin-bottom: 1rem;
+        color: #ff4081;
+        text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
+    }
+</style>
+
+<div class="user-info">
+    <p>
+        {% if user.profileimg.picture %}
+            <img src="{{ user.profileimg.picture.url }}" width="100" height="100" class="profile-img"><br>
+        {% else %}
+            <img src="/media/images/default.png" width="100" height="100" class="profile-img"><br>
+        {% endif %}
+        <span class="neon-text-purple">{{ user.username }}</span>
+    </p>
+</div>
+
+<h2 class="neon-text-purple">Friend Requests</h2>
+
+<div class="friend-requests">
+    {% if not friend_request %}
+        <p>No friend request</p>
+    {% else %}
+        {% for req in friend_request %}
+            <p>{{ req }} :
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="name" value="{{ req }}">
+                    <input type="hidden" name="answer" value="yes">
+                    <input type="submit" value="Yes">
+                </form>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="name" value="{{ req }}">
+                    <input type="hidden" name="answer" value="no">
+                    <input type="submit" value="No">
+                </form>
+            </p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="text-left mb-2"></div>
+    <button id="btn-return" onclick="changePage('/profiles/friends/')">Return</button>
+</div>

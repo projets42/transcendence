@@ -1,0 +1,66 @@
+{% load static %}
+
+<div id="error_messages"></div>
+<form method="post" action="/pong/local/" class="neon-form p-4 rounded shadow-lg position-relative">
+
+    {% csrf_token %}
+
+	<h2 class="text-center neon-title">GAME SETUP</h2>
+
+	<div class="form-group">
+        <label class="neon-label text-center">Number of players:</label>
+        <div class="d-flex justify-content-center align-items-center gap-4">
+            <div class="form-check">
+				<input class="form-check-input neon-radio" type="radio" name="number" value="1v1" required id="id_number_0" checked>
+				<label for="id_number_0" class="form-check-label neon-radio-label">2</label>
+
+				<input class="form-check-input neon-radio" type="radio" name="number" value="2v2" required id="id_number_1">
+				<label for="id_number_1" class="form-check-label neon-radio-label">4</label>
+			</div>
+        </div>
+		<p class="player-keys mt-2">PLAYER 1: <span>W</span> / <span>S</span></p>
+        <p class="player-keys">PLAYER 2: <span>⇧</span> / <span>⇩</span></p>
+        <p class="player-keys">PLAYER 3: <span>Y</span> / <span>H</span></p>
+        <p class="player-keys">PLAYER 4: <span>PgUp</span> / <span>PgDn</span></p>
+    </div>
+
+	<div class="form-group">
+        <label class="neon-label text-center">AI:</label>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <label style="display: none;" for="id_botplayers_0"><input type="checkbox" name="botplayers" value="0" id="id_botplayers_0" checked>None</label>
+            <div class="form-check">
+				<input class="form-check-input neon-checkbox" type="checkbox" name="botplayers" value="1" id="id_botplayers_1">
+				<label class="form-check-label neon-checkbox-label" for="id_botplayers_1">Player1</label>
+
+				<input class="form-check-input neon-checkbox" type="checkbox" name="botplayers" value="2" id="id_botplayers_2">
+				<label class="form-check-label neon-checkbox-label" for="id_botplayers_2">Player2</label>
+
+				<input class="form-check-input neon-checkbox" type="checkbox" name="botplayers" value="3" id="id_botplayers_3">
+				<label class="form-check-label neon-checkbox-label" for="id_botplayers_3">Player3</label>
+
+				<input class="form-check-input neon-checkbox" type="checkbox" name="botplayers" value="4" id="id_botplayers_4">
+				<label class="form-check-label neon-checkbox-label" for="id_botplayers_4">Player4</label>
+			</div>
+        </div>
+    </div>
+
+	<div class="form-group d-flex justify-content-between flex-wrap gap-4">
+        <div class="d-flex align-items-center gap-2">
+			<label for="nballs" class="neon-label text-align">Number of balls:</label>
+            <button type="button" class="btn neon-btn" onclick="changeBallsNumber('-')">-</button>
+			<input type="number" name="balls_number" id="nballs" value="1" readonly class="form-control neon-input w-auto">
+			<button type="button" class="btn neon-btn" onclick="changeBallsNumber('+')">+</button>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+			<label for="score" class="neon-label">Score to win:</label>
+            <button type="button" class="btn neon-btn" onclick="changeScoreToWin('-')">-</button>
+			<input type="number" name="score_to_win" id="score" value="3" readonly class="form-control neon-input w-auto">
+			<button type="button" class="btn neon-btn" onclick="changeScoreToWin('+')">+</button>
+        </div>
+    </div>
+
+	<div class="text-center">
+		<input type="submit" value="PLAY" class="btn neon-btn neon-btn-play" onclick="submitGameSettings()">
+	</div>
+</form>
+<button id="btn-return" onclick="changePage('/play/')">BACK</button>

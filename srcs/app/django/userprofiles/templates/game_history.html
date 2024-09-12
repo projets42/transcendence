@@ -1,0 +1,112 @@
+{% load static %}
+
+<style>
+    .btn-return {
+        font-size: 1.25rem;
+        color: var(--neon-text-color);
+        background-color: black;
+        border: 2px solid var(--neon-text-color);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        text-shadow: 0 0 5px var(--neon-text-color), 0 0 10px var(--neon-text-color);
+        transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 0 10px var(--neon-text-color), 0 0 20px var(--neon-text-color);
+    }
+
+    .btn-return:hover {
+        background-color: var(--neon-text-color);
+        color: black;
+        border-color: var(--neon-text-color);
+        box-shadow: 0 0 20px var(--neon-text-color), 0 0 30px var(--neon-text-color);
+        text-shadow: 0 0 10px black, 0 0 20px black;
+    }
+
+    .alert-info-custom {
+        background-color: black;
+        color: var(--neon-text-color);
+        border: 1px solid var(--neon-text-color);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        text-align: center;
+        text-shadow: 0 0 5px var(--neon-text-color), 0 0 10px var(--neon-text-color);
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        text-shadow: 0 0 5px var(--neon-text-color), 0 0 10px var(--neon-text-color);
+    }
+
+    .game-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-shadow: 0 0 5px var(--neon-text-color), 0 0 10px var(--neon-text-color);
+    }
+
+    .game-date {
+        font-size: 0.875rem;
+        color: gray;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+</style>
+
+<div class="text-center mb-4">
+    <button class="btn-return" onclick="history.back()">Return</button>
+
+	<!-- TEST GAME GENERATOR -->
+	<form method="post">
+		{% csrf_token %}
+		<input type="text" value="test" name="test">
+		<input type="submit" value="Add">
+	</form>
+</div>
+
+<div class="container">
+    <div class="text-center mb-4">
+        <p>
+            {% if user.profileimg.picture %}
+                <img src="{{ user.profileimg.picture.url }}" width="100" height="100" class="profile-img">
+            {% else %}
+                <img src="/media/images/default.png" width="100" height="100" class="profile-img">
+            {% endif %}
+            <br>
+            <span class="neon-text">{{ user.username }}</span>
+        </p>
+    </div>
+
+    <h2 class="text-center mb-4 neon-text">{{ game_name }} Game History</h2>
+
+    {% if not games %}
+        <div class="alert-info-custom">
+            No {{ title }} games found.
+        </div>
+    {% else %}
+        <div class="row game-list">
+            {% for game in games %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title game-title">{{ game.date | date:"m/d/y g:i a" }}</h5>
+                            <p class="game-date">
+                                Winner: {{ game.winner }}
+                            </p>
+                            <p class="game-date">
+                                {{ game.winner_score }} - {{ game.loser_score }}
+                            </p>
+                            <p class="game-date">
+                                Loser: {{ game.loser }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

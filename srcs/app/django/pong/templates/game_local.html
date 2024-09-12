@@ -1,0 +1,36 @@
+{% load static %}
+
+<style>
+    body{background-color: black; color: white;}
+
+	canvas {
+		position: relative;
+		top: 50px;
+		width: 100%;
+		height: 100%;
+		margin-bottom: 20px;
+		z-index: 0;
+	}
+</style>
+
+<div id="gameContainer" class="text-center">
+    <canvas id="gameBoard" width="1000" height="500"></canvas>
+    <div id="scoreText" class="neon-text mt-3">0 : 0</div>
+    <div id="firstRowBtn" class="mt-3">
+        <button id="resetBtn" class="btn neon-btn">Reset</button>
+        <button id="btn-return" onclick="changePage('/pong/local/')">Exit</button>
+    </div>
+</div>
+
+<!-- "1v1" | "2v2" (str) -->
+{{ nplayers | json_script:"nplayers" }}
+
+<!-- True | False -->
+{{ bot1 | json_script:"bot1" }}
+{{ bot2 | json_script:"bot2" }}
+{{ bot3 | json_script:"bot3" }}
+{{ bot4 | json_script:"bot4" }}
+
+<!-- Between 1 - 100 -->
+{{ balls | json_script:"balls" }}
+{{ score | json_script:"score" }}

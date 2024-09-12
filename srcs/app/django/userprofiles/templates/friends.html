@@ -1,0 +1,64 @@
+<style>
+    .color-1 {color: #f44336; text-shadow: 0 0 5px #f44336, 0 0 10px #f44336;}
+    .color-2 {color: #2196F3; text-shadow: 0 0 5px #2196F3, 0 0 10px #2196F3;}
+    .color-3 {color: #4CAF50; text-shadow: 0 0 5px #4CAF50, 0 0 10px #4CAF50;}
+    .color-4 {color: #FFEB3B; text-shadow: 0 0 5px #FFEB3B, 0 0 10px #FFEB3B;}
+    .color-5 {color: #9C27B0; text-shadow: 0 0 5px #9C27B0, 0 0 10px #9C27B0;}
+
+    .container {
+        max-width: 1200px;
+    }
+</style>
+
+<div class="user-info">
+    <p class="user-infos" data-user-section="friends">
+        {% if user.profileimg.picture %}
+            <img src="{{ user.profileimg.picture.url }}" width="150" height="150" class="profile-img"><br>
+        {% else %}
+            <img src="/media/images/default.png" width="150" height="150" class="profile-img"><br>
+        {% endif %}
+        <span class="neon-text">{{ user.username }}</span>
+    </p>
+    <form method="POST" action="/profiles/request/">
+        {% csrf_token %}
+        <input style="display: none;" type="text" value="request" name="request">
+        <input class="neon-btn-play" type="submit" value="Friend requests ({{ friend_request }})">
+    </form>
+</div>
+
+<form method="post" class="neon-form">
+    {% csrf_token %}
+    <input type="text" name="friend_name" placeholder="Enter username to add friend" required maxlength="15">
+    <input class="neon-btn-play" type="submit" value="Add Friend">
+    <div id="error_messages"></div>
+</form>
+
+<h2 class="neon-text">Friends</h2>
+
+<div class="friends-list">
+    {% if not friends %}
+        <p>No friends yet</p>
+    {% else %}
+        <div class="row">
+            {% for friend in friends %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title {% cycle 'color-1' 'color-2' 'color-3' 'color-4' 'color-5' %}">{{ friend.username }}</h5>
+                        <p>
+                            <form method="post" action="/profiles/friends/">
+                                {% csrf_token %}
+                                <input type="hidden" name="friend_id" value="{{ friend.id }}">
+                                <input class="friend_list neon-btn-play" type="submit" value="View Profile">
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+<div class="text-left mt-5">
+	<button id="btn-return" onclick="changePage('/')">Return</button>
+</div>

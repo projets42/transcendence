@@ -1,0 +1,71 @@
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+    networks:
+      - transcendence
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./app/nginx
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "8443:443"
+    depends_on:
+      - django
+    networks:
+      - transcendence
+    restart: on-failure
+    volumes:
+      - static_volume:/var/lib/nginx/static
+      - media_volume:/var/lib/nginx/media
+
+  django:
+    container_name: django
+    build:
+      context: ./app/django
+      dockerfile: Dockerfile
+    env_file: .env
+    depends_on:
+      - db
+    networks:
+      - transcendence
+    restart: on-failure
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app/django/:/usr/src/app/
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/media
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - transcendence
+
+volumes:
+  pgdata:
+    driver: local
+    name: pgdata
+  static_volume:
+    driver: local
+    name: static_volume
+  media_volume:
+    driver: local
+    name: media_volume
+
+networks:
+  transcendence:
+    name: transcendence
+    driver: bridge

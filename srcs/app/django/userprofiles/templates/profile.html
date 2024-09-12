@@ -1,0 +1,26 @@
+{% load static %}
+
+<h3 id="profile-title">Profile</h3>
+<p><a class="back-link" onclick="hideLoginForm()">&lt;&lt; back</a></p>
+<div id="user-profile" class="text-center">
+    <p class="user-infos" data-user-section="profile">
+        <a data-toggle="modal" data-target="#changeAvatarModal">
+            {% if user.profileimg.picture %}
+                <img src="{{ user.profileimg.picture.url }}" width="90" height="90" class="profile-img"><br>
+            {% else %}
+                <img src="/media/images/default.png" width="90" height="90" class="profile-img"><br>
+            {% endif %}
+        </a>
+        <span class="neon-text">{{ user.username }}</span>
+    </p>
+    <p class="neon-text">
+		<button class="neon-btn mb-3" onclick="changePage('/profiles/friends/'); hideLoginForm()">Friends</button>
+        <br>
+        <a class="stats-selection-text" onclick="changePage('/profiles/ponggames/'); hideLoginForm()">Local pong games : {{ games }}</a><br>
+        <a class="stats-selection-text" onclick="changePage('/profiles/pongtournaments/'); hideLoginForm()">Tournament pong games : {{ games }}</a><br>
+        <a class="stats-selection-text" onclick="changePage('/profiles/bombermangames/'); hideLoginForm()">Bomberman games : {{ bbm_games }}</a><br>
+    </p>
+
+	<p><button class="neon-btn mt-3" data-toggle="modal" data-target="#changeUsernameModal">Modify username</button></p>
+    <p><button id="btn-logout" href="javascript:void(0);" onclick="changePage('/'); logoutUser()">Log out</button></p>
+</div>
