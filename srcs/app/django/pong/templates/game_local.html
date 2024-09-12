@@ -34,3 +34,12 @@
 <!-- Between 1 - 100 -->
 {{ balls | json_script:"balls" }}
 {{ score | json_script:"score" }}
+
+<!-- form for js to send winner name to python -->
+<form style="display: none;" id="winnerForm" method="post" action="/pong/local/">
+    {% csrf_token %}
+    <input type="text" id="winner" name="winner">
+    <input type="number" id="winnerScore" name="winnerScore">
+    <input type="number" id="loserScore" name="loserScore">
+    <input type="submit" id="result" name="result" value="result">
+</form>

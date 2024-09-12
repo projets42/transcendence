@@ -3,8 +3,8 @@ from django.db import models
 class Pong(models.Model):
     local = models.BooleanField(default = True)
     creator = models.IntegerField(default = 0)
-    winner = models.CharField(max_length = 15, default = "winner")
-    loser = models.CharField(max_length = 15, default = "loser")
+    winner = models.CharField(max_length = 15, default = "player1")
+    loser = models.CharField(max_length = 15, default = "player2")
     winner_score = models.IntegerField(default = 3)
     loser_score = models.IntegerField(default = 0)
     date = models.DateTimeField(auto_now_add = True)

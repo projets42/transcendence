@@ -45,6 +45,15 @@ def start_local_game(request):
             html_data = render_to_string('game_local.html', {"score": score, "nplayers": nplayers, "bot1": bot1, "bot2": bot2, "bot3": bot3, "bot4": bot4,"balls": nballs})
             return JsonResponse({"success": True, "html_data": html_data})
 
+        # end of game
+        if request.POST.get('winner'):
+            loserScore = request.POST["loserScore"]
+            winnerScore = request.POST["winnerScore"]
+            if request.POST["winner"] == "player1":
+                Pong.objects.create(creator = request.user.id, loser_score = loserScore, winner_score = winnerScore)
+            else:
+                Pong.objects.create(creator = request.user.id, winner = "player2", loser = "player1", loser_score = loserScore, winner_score = winnerScore)
+
         # display settings form
         html_data = render_to_string('game_settings.html', {"score": score})
         return JsonResponse({"success": True, "html_data": html_data})

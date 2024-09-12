@@ -96,8 +96,8 @@ def show_profile(request):
 
     friends = Friend.objects.all().filter(user = user, confirmed = True).count()
 
-    games = Pong.objects.all().filter(creator=user_id).count()
-    local_games = Pong.objects.all().filter(creator=user_id).count()
+    games = Pong.objects.all().filter(creator=user_id, local=False).count()
+    local_games = Pong.objects.all().filter(creator=user_id, local=True).count()
     bbm_games = Bomberman.objects.all().filter(creator=user_id).count()
 
     """ AJAX Response """
@@ -186,7 +186,7 @@ def pong_games(request):
         Pong.objects.create(creator = request.user.id, winner = "Sam", loser = "Sio", loser_score = 0)
 
     user_id = request.user.id
-    games = Pong.objects.all().filter(creator=user_id)
+    games = Pong.objects.all().filter(creator=user_id, local=True)
     context = {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games}
 
     if request.method == 'PUT':
@@ -201,7 +201,7 @@ def pong_games(request):
 @login_required
 def pong_tournaments(request):
     user_id = request.user.id
-    games = Pong.objects.all().filter(creator=user_id)
+    games = Pong.objects.all().filter(creator=user_id, local=False)
     context = {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games}
 
     if request.method == 'PUT':
