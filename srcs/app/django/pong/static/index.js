@@ -41,7 +41,7 @@ let paddleSpawn;
 let paddleSpawnTop;
 let paddleSpawnBottom;
 class Paddle{
-    constructor(width, height, x, y, yMin, yMax){
+    constructor(width, height, x, y, yMin, yMax, keyUp, keyDown){
         this.width = width;
         this.height = height
         this.x = x;
@@ -49,6 +49,8 @@ class Paddle{
         this.yMin = yMin;
         this.yMax = yMax;
         this.score = 0;
+        this.keyUp = keyUp;
+        this.keyDown = keyDown;
     }
     setPositionComparedWithAlly(position){
         this.position = position;
@@ -277,6 +279,16 @@ function movePaddles(balls, fakeballs){
         paddle2.y -= paddleSpeed;
     if (keys[paddle2down] && paddle2.y <= paddle2.yMax)
         paddle2.y += paddleSpeed;
+
+    //reset IA paddle movement value
+    if (player1Bot == "true"){
+        keys[paddle1up] = false;
+        keys[paddle1down] = false;
+    }
+    if (player2Bot == "true"){
+        keys[paddle2up] = false;
+        keys[paddle2down] = false;
+    }
 };
 function checkBallDestination(ball, fakeball, currentpaddleheight)
 {
@@ -390,16 +402,16 @@ function movePaddlesIA(fakeballs, paddle)
 function movePaddleIaToSpawn(paddle){
     // go middle court (stand by)
     if (paddle.y < (gameHeight - paddle.height) / 2)
-        paddle.y += paddleSpeed;
+        keys[paddle.keyDown] = true;
     else if (paddle.y > (gameHeight - paddle.height) / 2)
-        paddle.y -= paddleSpeed;
+        keys[paddle.keyUp] = true;
 }
 function movePaddleIaToFakeball(targetball, paddle, fakeballs){
     // position itself were the ball will arrive with random angle variant
     if (paddle.y >= paddle.yMin && (paddle.y + (paddle.height / 2) > targetball.y))
-        paddle.y -= paddleSpeed;
+        keys[paddle.keyUp] = true;
     else if (paddle.y <= paddle.yMax && (paddle.y + (paddle.height / 2) < targetball.y))
-        paddle.y += paddleSpeed;
+        keys[paddle.keyDown] = true;
     else if (targetball.arrivalTime <= 0)
         fakeballs.splice(targetball.index, 1);
 }
@@ -613,12 +625,30 @@ function movePaddles4Players(balls, fakeballs){
     }
 
 
-    movePaddles4PlayersHuman(paddle1, paddle3, paddle1up, paddle1down);
-    movePaddles4PlayersHuman(paddle2, paddle4, paddle2up, paddle2down);
-    movePaddles4PlayersHuman(paddle3, paddle1, paddle3up, paddle3down);
-    movePaddles4PlayersHuman(paddle4, paddle2, paddle4up, paddle4down);
+    movePaddles4PlayersInput(paddle1, paddle3, paddle1up, paddle1down);
+    movePaddles4PlayersInput(paddle2, paddle4, paddle2up, paddle2down);
+    movePaddles4PlayersInput(paddle3, paddle1, paddle3up, paddle3down);
+    movePaddles4PlayersInput(paddle4, paddle2, paddle4up, paddle4down);
+
+    //reset IA paddle movement value
+    if (player1Bot == "true"){
+        keys[paddle1up] = false;
+        keys[paddle1down] = false;
+    }
+    if (player2Bot == "true"){
+        keys[paddle2up] = false;
+        keys[paddle2down] = false;
+    }
+    if (player3Bot == "true"){
+        keys[paddle3up] = false;
+        keys[paddle3down] = false;
+    }
+    if (player4Bot == "true"){
+        keys[paddle4up] = false;
+        keys[paddle4down] = false;
+    }
 };
-function movePaddles4PlayersHuman(paddle, paddleally, paddleup, paddledown){
+function movePaddles4PlayersInput(paddle, paddleally, paddleup, paddledown){
     // move humans top paddles (paddle 1 and 3)
     if (!keys[paddleup] || !keys[paddledown])
     {
@@ -687,17 +717,17 @@ function ballAddAscendedSort(targetballs, newtargetball){
 function movePaddleIa(targetball, paddle, paddleally, fakeballs){
     if (paddle.y >= paddle.yMin && (paddle.y + (paddle.height / 2) > targetball.y))
     {
-        paddle.y -= paddleSpeed;
+        keys[paddle.keyUp] = true;
         //check if ally collision with friendly paddle
         if (paddle.position == BOTTOM && paddle.y < paddleally.y + paddleally.height)
-            paddleally.y -= paddleSpeed;        
+            keys[paddleally.keyUp] = true;
     }
     else if (paddle.y <= paddle.yMax && (paddle.y + (paddle.height / 2) < targetball.y))
     {
-        paddle.y += paddleSpeed;
+        keys[paddle.keyDown] = true;
         //check if ally collision with friendly paddle
         if (paddle.position == TOP && paddle.y + paddle.height > paddleally.y)
-            paddleally.y += paddleSpeed;
+            keys[paddleally.keyDown] = true;
     }
     else if (targetball.arrivalTime <= 0){
         fakeballs.splice(targetball.index, 1);
@@ -707,17 +737,17 @@ function movePaddleToSpawn(spawn, paddle, paddleally){
     // go middle court (stand by)
     if (paddle.y >= paddle.yMin && paddle.y > spawn)
     {
-        paddle.y -= paddleSpeed;
+        keys[paddle.keyUp] = true;
         //check if ally collision with friendly paddle
         if (paddle.position == BOTTOM && paddle.y < paddleally.y + paddleally.height)
-            paddleally.y -= paddleSpeed;
+            keys[paddleally.keyUp] = true;
     }
     else if (paddle.y <= paddle.yMax && paddle.y < spawn)
     {
-        paddle.y += paddleSpeed;
+        keys[paddle.keyDown] = true;
         //check if ally collision with friendly paddle
         if (paddle.position == TOP && paddle.y + paddle.height > paddleally.y)
-            paddleally.y += paddleSpeed;
+            keys[paddleally.keyDown] = true;
     }
 }
 function checkCollision4Players(ball, currentBallSpeed){
@@ -815,8 +845,8 @@ function resetGame(){
 
     
     //set paddles
-    paddle1 = new Paddle(paddleWidth, paddleHeight, 0, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
-    paddle2 = new Paddle(paddleWidth, paddleHeight, gameWidth - paddleWidth, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed);
+    paddle1 = new Paddle(paddleWidth, paddleHeight, 0, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed, paddle1up, paddle1down);
+    paddle2 = new Paddle(paddleWidth, paddleHeight, gameWidth - paddleWidth, paddleSpawn, paddleSpeed, gameHeight - paddleHeight - paddleSpeed, paddle2up, paddle2down);
     paddle1.score = 0;
     paddle2.score = 0;
 
@@ -863,10 +893,10 @@ function reset4Players(){
 
 
     //set paddles
-    paddle1 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
-    paddle2 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed);
-    paddle3 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
-    paddle4 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed);
+    paddle1 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed, paddle1up, paddle1down);
+    paddle2 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnTop, paddleSpeed, gameHeight - paddleHeight4Players * 2 - paddleSpeed, paddle2up, paddle2down);
+    paddle3 = new Paddle(paddleWidth, paddleHeight4Players, 0, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed, paddle3up, paddle3down);
+    paddle4 = new Paddle(paddleWidth, paddleHeight4Players, gameWidth - paddleWidth, paddleSpawnBottom, paddleSpeed + paddleHeight4Players, gameHeight - paddleHeight4Players - paddleSpeed, paddle4up, paddle4down);
     paddle1.setPositionComparedWithAlly(TOP);
     paddle2.setPositionComparedWithAlly(TOP);
     paddle3.setPositionComparedWithAlly(BOTTOM);
