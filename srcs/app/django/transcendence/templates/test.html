@@ -1,1 +1,23 @@
-The result is :{{ result }}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Transcendence</title>
+    </head>
+    <body>
+        <h1>TEST</h1>
+        <p>access token: {{ token }}</p>
+        <form method="post" action="/test/">
+            {% csrf_token %}
+            <input style="display: none;" type="text" name="token" value="token">
+            <input type="submit" value="get token">
+        </form>
+
+        <form method="post" action="/test/">
+            {% csrf_token %}
+            <input style="display: none;" type="text" name="auth" value="auth">
+            <input type="submit" value="42 auth">
+        </form>
+    </body>
+</html>
