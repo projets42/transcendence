@@ -41,3 +41,18 @@ def load_sidebar(request):
         return JsonResponse({'html': sidebar_html})
     else:
         return redirect('index')
+
+
+
+import requests # allows to send HTTP requests in Python.
+
+def test(request):
+    url = "https://api.intra.42.fr/oauth/token"
+    params = {
+        "grant_type": 'client_credentials',
+        "client_id": 'u-s4t2ud-34134e67a8827ff2a35b81c9dd90550be95e01ca581ca6c3a51f26b8241b983b',
+        "client_secret": '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'
+    }
+    response = requests.post(url, data=params)
+    result = response.json()
+    return render(request, "test.html", {"result": result})
