@@ -19,5 +19,11 @@
             <input style="display: none;" type="text" name="auth" value="auth">
             <input type="submit" value="42 auth">
         </form>
+
+        <form method="post" action="/test/">
+            {% csrf_token %}
+            <input style="display: none;" type="text" name="info" value="info">
+            <input type="submit" value="get info">
+        </form>
     </body>
 </html>
