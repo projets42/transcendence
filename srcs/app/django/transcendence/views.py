@@ -5,14 +5,70 @@ from django.http import JsonResponse
 from datetime import datetime
 from userprofiles.models import Status
 from django.contrib.auth.models import User
+import os
+import requests
+import json
+import random
+import string
+state = ""
 
 def index(request):
+    global state
+
     if request.method == 'PUT':
         changeStatus(request)
+
     if request.method != 'GET':
+
+        # authenticate with 42
+        if request.POST.get('auth'):
+            client_id = os.getenv('CLIENT_ID')
+            redirect_uri = "https://localhost:8443/"
+            response_type = "code"
+            scope = "public"
+            state = get_random_string()
+            url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type={response_type}&scope={scope}&state={state}"
+            return redirect(url)
+        
+        # access index from another page
         html_data = render_to_string('index.html')
         return JsonResponse({"success": True, "html_data": html_data})
+
+    # verify if get response from 42
+    if request.GET.get('state') and request.GET.get('code'):
+        temp = request.GET["state"]
+
+        # check if state is the same as previously sent
+        if temp == state:
+            code = request.GET["code"]
+
+            # get access token
+            url = "https://api.intra.42.fr/oauth/token"
+            params = {
+                'grant_type': 'authorization_code',
+                'client_id': os.getenv('CLIENT_ID'),
+                'client_secret': os.getenv('CLIENT_SECRET'),
+                'code': code,
+                'redirect_uri': 'https://localhost:8443/',
+                'state': state
+            }
+            response = json.loads(requests.post(url = url, params = params).text)
+            access_token = response['access_token']
+
+            # use access token to get public user infos
+            url = "https://api.intra.42.fr/v2/me"
+            headers = {
+                'Authorization': f"Bearer {access_token}"
+            }
+            response = json.loads(requests.get(url = url, headers = headers).text)
+            login = response['login']
+            picture = response['image']['versions']['medium']
+
+            return render(request, "index_full.html", {"username": login, "picture": picture})
+
+    # access index by url
     return render(request, "index_full.html")
+
 
 @login_required
 def selection(request):
@@ -43,56 +99,54 @@ def load_sidebar(request):
         return redirect('index')
 
 
+def get_random_string(length=70):
+    characters = string.ascii_letters + string.digits + "_"
+    random_str = ''.join(random.choice(characters) for i in range(length))
+    return random_str
 
-import requests # allows to send HTTP requests in Python.
 
 def test(request):
+    global state
     if request.method == 'POST':
 
-        if request.POST.get('token'):
-            url = "https://api.intra.42.fr/oauth/token"
-            params = {
-                "grant_type": 'client_credentials',
-                "client_id": 'u-s4t2ud-34134e67a8827ff2a35b81c9dd90550be95e01ca581ca6c3a51f26b8241b983b',
-                "client_secret": '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'
-            }
-            response = requests.post(url, data=params)
-            result = response.json()
-            return render(request, "test.html", {"token": result["access_token"]})
-
-        # curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" "https://api.intra.42.fr/v2/users"
-
         if request.POST.get('auth'):
-            url = "https://api.intra.42.fr/oauth/authorize"
-            params = {
-                "client_id": 'u-s4t2ud-34134e67a8827ff2a35b81c9dd90550be95e01ca581ca6c3a51f26b8241b983b',
-                "redirect_uri": 'https://localhost:8443/test/',
-                "scope": 'public',
-                "state": '_q)x2+7skd1fz!68g9pe_y^2nlw)n&@n^%01*y&x!_-g%k$$s',
-                "response_type": 'code'
-            }
-            response = requests.get(url, data=params)
-            result = response.json()
-            return render(request, "test.html", {"token": "ok"})
+            client_id = "u-s4t2ud-88c267974e5b8f414881483b35db4b715caeadd9c2abd182590ef1d0b6dd6ec3"
+            redirect_uri = "https://localhost:8443/test/"
+            response_type = "code"
+            scope = "public"
+            state = get_random_string()
+            url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type={response_type}&scope={scope}&state={state}"
+            return redirect(url)
 
-        if request.POST.get('info'):
+    # verify state and get code
+    if request.GET.get('state') and request.GET.get('code'):
+        temp = request.GET["state"]
+        # check if state is the same as previously sent
+        if temp == state:
+            code = request.GET["code"]
+
+            # get access token
             url = "https://api.intra.42.fr/oauth/token"
             params = {
-                "grant_type": 'client_credentials',
-                "client_id": 'u-s4t2ud-34134e67a8827ff2a35b81c9dd90550be95e01ca581ca6c3a51f26b8241b983b',
-                "client_secret": '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'
+                'grant_type': 'authorization_code',
+                'client_id': 'u-s4t2ud-88c267974e5b8f414881483b35db4b715caeadd9c2abd182590ef1d0b6dd6ec3',
+                'client_secret': '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',
+                'code': code,
+                'redirect_uri': 'https://localhost:8443/test/',
+                'state': state
             }
-            response = requests.post(url, data=params)
-            result = response.json()
-            token = result["access_token"]
+            response = json.loads(requests.post(url = url, params = params).text)
+            access_token = response['access_token']
 
-            url = "https://api.intra.42.fr/v2/users"
+            # use access token to get public user infos
+            url = "https://api.intra.42.fr/v2/me"
             headers = {
-                "Authorization": f"Bearer {token}"
+                'Authorization': f"Bearer {access_token}"
             }
-            response = requests.get(url, headers=headers)
-            result = response.json()
-            return render(request, "test.html", {"token": result})
+            response = json.loads(requests.get(url = url, headers = headers).text)
+            login = response['login']
+            picture = response['image']['versions']['medium']
+            
+            return render(request, "test.html", {"username": login, "picture": picture})
 
-    # print(token.get("/v2/cursus").parsed)
     return render(request, "test.html")

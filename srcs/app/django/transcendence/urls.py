@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', index, name = 'index'),
-    path('test/', test),
+    path('test/', test), # to delete
     path('play/', selection, name = 'selection'),
     path('admin/', admin.site.urls),
     path('profiles/', include("userprofiles.urls")),

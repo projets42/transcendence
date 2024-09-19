@@ -28,6 +28,14 @@
 									<div id="main-content">
 										<input id="play-button" type="button" value="PLAY" onclick="toggleLoginForm()">
 									</div>
+
+									<!-- 42 button for Siobhan to design ;) -->
+									<form id="auth42" method="post" action="/">
+										{% csrf_token %}
+										<input style="display: none;" type="text" name="auth" value="auth">
+										<input type="submit" value="42 auth">
+									</form>
+
 								</div>
 							</div>
 						{% endif %}

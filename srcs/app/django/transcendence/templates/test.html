@@ -7,23 +7,13 @@
     </head>
     <body>
         <h1>TEST</h1>
-        <p>access token: {{ token }}</p>
-        <form method="post" action="/test/">
-            {% csrf_token %}
-            <input style="display: none;" type="text" name="token" value="token">
-            <input type="submit" value="get token">
-        </form>
+        <p>access token: {{ username }}</p>
+        <img src="{{ picture }}" width="70" height="70" style="border-radius:50%; display:block; margin:0 auto; box-shadow: 0 0 10px #08f;">
 
         <form method="post" action="/test/">
             {% csrf_token %}
             <input style="display: none;" type="text" name="auth" value="auth">
             <input type="submit" value="42 auth">
-        </form>
-
-        <form method="post" action="/test/">
-            {% csrf_token %}
-            <input style="display: none;" type="text" name="info" value="info">
-            <input type="submit" value="get info">
         </form>
     </body>
 </html>
