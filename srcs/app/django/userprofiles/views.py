@@ -126,7 +126,11 @@ def userinfo(request):
 
         if fromJS:
             # Request is coming from JavaScript
-            profile_img_url = user.profileimg.picture.url if hasattr(user, 'profileimg') and hasattr(user.profileimg, 'picture') else None
+            profile_img_url = None
+            if hasattr(user, 'profileimg') and hasattr(user.profileimg, 'picture'):
+                profile_img_url = user.profileimg.picture.url
+            elif hasattr(user, 'student42') and hasattr(user.student42, 'picture'):
+                profile_img_url = user.student42.picture
 
             result = {
                 'username': user.username,
@@ -155,6 +159,7 @@ def modify_username(request):
     else:
         form = ModificationForm(instance=request.user)
     return redirect("index")
+
 
 @login_required
 def modify_userpicture(request):

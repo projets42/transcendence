@@ -16,6 +16,14 @@
 						{% else %}
 							<a onclick="toggleLoginForm()">log in</a>
 							<a onclick="toggleSignupModal()">Sign Up</a>
+
+							<!-- 42 button for Siobhan to design ;) -->
+							<form id="auth42" method="post" action="/">
+								{% csrf_token %}
+								<input style="display: none;" type="text" name="auth" value="auth">
+								<input type="submit" value="42 auth">
+							</form>
+							
 						{% endif %}
 					</div>
 					<div id="content">

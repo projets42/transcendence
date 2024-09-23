@@ -20,6 +20,8 @@ function overloadSubmit()
     forms = document.querySelectorAll("#content form");
     for (let i = 0; i < forms.length; i++)
     {
+        if (forms[i].id == "auth42")
+            continue ;
         forms[i].addEventListener('submit', function(event) {
             event.preventDefault();
             const form = event.target; // represents the form that triggered the event.
