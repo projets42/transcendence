@@ -73,6 +73,8 @@
         <p>
             {% if user.profileimg.picture %}
                 <img src="{{ user.profileimg.picture.url }}" width="100" height="100" class="profile-img">
+            {% elif user.student42.picture %}
+                <img src="{{ user.student42.picture }}" width="70" height="70" style="border-radius:50%; display:block; margin:0 auto; box-shadow: 0 0 10px #08f;">
             {% else %}
                 <img src="/media/images/default.png" width="100" height="100" class="profile-img">
             {% endif %}

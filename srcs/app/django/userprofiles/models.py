@@ -25,3 +25,13 @@ class Status(models.Model):
     class Meta:
         verbose_name = "Status"
         verbose_name_plural = "Status"
+
+
+class Student42(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # login = models.CharField(max_length = 16, default = "")
+    picture = models.CharField(max_length = 255, default = "")
+
+    class Meta:
+        verbose_name = "42 Student"
+        verbose_name_plural = "42 Students"
