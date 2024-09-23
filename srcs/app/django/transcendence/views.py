@@ -15,18 +15,28 @@ import random
 import string
 state = ""
 
+
 def login_user_42(request, username, picture):
-    user = User.objects.all().filter(username = username).first()
-    if not user:
-        user = User.objects.create_user(username)
-        user.set_unusable_password()
-        user.save()
-        Student42.objects.create(user = user, picture = picture)
-        Status.objects.create(user = user)
+    student = Student42.objects.all().filter(login42 = username).first()
+    if student:
+        try:
+            login(request, student.user, backend=settings.AUTHENTICATION_BACKENDS[0])
+        except Exception as e:
+            print(e)
+        return
+
+    login42 = username
+    while User.objects.all().filter(username = username).first():
+        username = username + "_"
+    user = User.objects.create_user(username)
+    user.set_unusable_password()
+    user.save()
+    Student42.objects.create(user = user, login42 = login42, picture = picture)
+    Status.objects.create(user = user)
     try:
         login(request, user, backend=settings.AUTHENTICATION_BACKENDS[0])
     except Exception as e:
-        return
+        print(e)
 
 
 def authenticate_with_42(request):
