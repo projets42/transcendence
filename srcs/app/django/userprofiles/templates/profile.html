@@ -19,9 +19,9 @@
     <p class="neon-text">
         <button id="friends-btn" class="neon-btn mb-3" onclick="changePage('/profiles/friends/'); hideLoginForm()">Friends</button>
         <br>
-        <a id="local-pong-games" class="stats-selection-text" onclick="changePage('/profiles/ponggames/'); hideLoginForm()">Local pong games : {{ local_games }}</a><br>
-        <a id="tournament-pong-games" class="stats-selection-text" onclick="changePage('/profiles/pongtournaments/'); hideLoginForm()">Tournament pong games : {{ games }}</a><br>
-        <a id="bomberman-games" class="stats-selection-text" onclick="changePage('/profiles/bombermangames/'); hideLoginForm()">Bomberman games : {{ bbm_games }}</a><br>
+        <a id="local-pong-games" class="stats-selection-text" onclick="changePage('/profiles/ponggames/'); hideLoginForm()">Local pong games</a><a class="stats-selection-text"> : {{ local_games }}</a><br>
+        <a id="tournament-pong-games" class="stats-selection-text" onclick="changePage('/profiles/pongtournaments/'); hideLoginForm()">Tournament pong games</a><a class="stats-selection-text"> : {{ games }}</a><br>
+        <a id="bomberman-games" class="stats-selection-text" onclick="changePage('/profiles/bombermangames/'); hideLoginForm()">Bomberman games</a><a class="stats-selection-text"> : {{ bbm_games }}</a><br>
     </p>
 
     <p><button id="modify-username-btn" class="neon-btn mt-3" data-toggle="modal" data-target="#changeUsernameModal">Modify username</button></p>

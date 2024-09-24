@@ -69,6 +69,8 @@ function loadProfile() {
 	.then(data => {
 		if (data.html) {
 			document.getElementById('sidebar').innerHTML = data.html;
+			const lang = document.getElementById('language').value;
+    		changeLanguage(lang);
 		} else {
 			console.error('No HTML returned');
 		}
