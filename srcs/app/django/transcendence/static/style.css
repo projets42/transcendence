@@ -305,6 +305,42 @@ a:hover {
 		0 0 35px var(--sidebar-neon-color);
 }
 
+.separator {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 1rem;
+	color: white;
+	text-shadow: 0 0 10px var(--sidebar-neon-color);
+}
+
+.btn-42auth {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: white;
+	padding: 0.5rem 2rem;
+	border: 0.2rem solid var(--neon-border-color);
+	border-radius: 0.5rem;
+	background-color: black;
+	transition: text-shadow 0.3s ease, box-shadow 0.3s ease;
+	text-shadow:
+		0 0 5px var(--sidebar-neon-color),
+		0 0 10px var(--sidebar-neon-color),
+		0 0 20px var(--sidebar-neon-color);
+	box-shadow:
+		0 0 10px var(--sidebar-neon-color),
+		0 0 20px var(--neon-border-color);
+}
+
+.btn-42auth:hover {
+	text-shadow:
+		0 0 10px var(--sidebar-neon-color),
+		0 0 20px var(--sidebar-neon-color),
+		0 0 30px var(--sidebar-neon-color);
+	box-shadow:
+		0 0 20px var(--sidebar-neon-color),
+		0 0 30px var(--neon-border-color);
+}
+
 /* Modal */
 .modal-content {
     background-color: #1e1e1e;
@@ -720,7 +756,7 @@ input[type="text"] {
     border: 1px solid rgb(10, 10, 10);
     padding: 0.5rem;
     border-radius: 5px;
-    width: 70%;
+    /* width: 70%; */
     margin-bottom: 1rem;
 }
 
