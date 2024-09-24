@@ -11,6 +11,7 @@ urlpatterns = [
     path('pong/', include("pong.urls")),
     path('bomberman/', include("bomberman.urls")),
     path('sidebar/', load_sidebar, name='load_sidebar'),
+	path('set_language/', set_language, name='set_language'),
 ]
 
 if settings.DEBUG:

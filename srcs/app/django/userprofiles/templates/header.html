@@ -1,4 +1,10 @@
-
+<div class="language-selector">
+	<select id="language" onchange="changeLanguage(this.value)">
+		<option value="en">English</option>
+		<option value="fr">Français</option>
+		<option value="jp">日本語</option>
+	</select>
+</div>
 {% if user.is_authenticated %}
     {% include 'userinfos.html' %}
 {% else %}

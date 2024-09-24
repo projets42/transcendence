@@ -5,7 +5,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="changeUsernameModalLabel">Change Username</h5>
+				<h5 class="modal-title" id="change-username-title">Change Username</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -14,22 +14,23 @@
 				<form id="change-username-form" method="POST">
 					{% csrf_token %}
 					<div class="form-group">
-						<label for="new-username">New Username</label>
+						<label id="new-username-label" for="new-username">New Username</label>
 						<input type="text" class="form-control" id="new-username" name="username" value="{{ user.username }}" required>
 					</div>
-					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="submit" class="btn btn-primary" id="save-username-btn">Save</button>
 				</form>
 				<div id="form-errors"></div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <!-- Modal for changing avatar -->
 <div class="modal fade" id="changeAvatarModal" tabindex="-1" role="dialog" aria-labelledby="changeAvatarModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="changeAvatarModalLabel">Change Avatar</h5>
+				<h5 class="modal-title" id="change-avatar-title">Change Avatar</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -38,10 +39,10 @@
 				<form id="change-avatar-form" method="POST" enctype="multipart/form-data">
 					{% csrf_token %}
 					<div class="form-group">
-						<label for="picture">Profile Picture</label>
+						<label id="profile-picture-label" for="picture">Profile Picture</label>
 						<input type="file" class="form-control-file" id="picture" name="picture" required>
 					</div>
-					<button type="submit" class="btn btn-primary">Save changes</button>
+					<button type="submit" class="btn btn-primary" id="save-avatar-btn">Save changes</button>
 				</form>
 				<div id="form-errors"></div>
 			</div>

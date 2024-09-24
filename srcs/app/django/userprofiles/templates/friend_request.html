@@ -113,11 +113,11 @@
     </p>
 </div>
 
-<h2 class="neon-text-purple">Friend Requests</h2>
+<h2 id="friend-requests-title" class="neon-text-purple">Friend Requests</h2>
 
 <div class="friend-requests">
     {% if not friend_request %}
-        <p>No friend request</p>
+        <p id="no-friend-request">No friend request</p>
     {% else %}
         {% for req in friend_request %}
             <p>{{ req }} :
@@ -125,19 +125,19 @@
                     {% csrf_token %}
                     <input type="hidden" name="name" value="{{ req }}">
                     <input type="hidden" name="answer" value="yes">
-                    <input type="submit" value="Yes">
+                    <input id="accept-button" type="submit" value="Yes">
                 </form>
                 <form method="post">
                     {% csrf_token %}
                     <input type="hidden" name="name" value="{{ req }}">
                     <input type="hidden" name="answer" value="no">
-                    <input type="submit" value="No">
+                    <input id="decline-button" type="submit" value="No">
                 </form>
             </p>
         {% endfor %}
     {% endif %}
 </div>
 
-<div class="text-left mb-2"></div>
+<div class="text-left mb-2">
     <button id="btn-return" onclick="changePage('/profiles/friends/')">Return</button>
 </div>

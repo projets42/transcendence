@@ -62,6 +62,14 @@ function changePage(page, formData=null, byArrow=false)
             if (document.getElementById("playersList"))
                 initPlayerInput();
             overloadSubmit();
+			const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+			const languageSelector = document.getElementById('language');
+			if (languageSelector) {
+				languageSelector.value = savedLanguage;
+			}
+			if (savedLanguage) {
+				changeLanguage(savedLanguage);
+			}
         }
         else if (messagesDiv)
         {

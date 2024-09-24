@@ -96,7 +96,7 @@ def index(request):
             # login_user_42(request, "smalloir", "https://cdn.intra.42.fr/users/3a0086ca405d47d215796a68c6eda55e/medium_smalloir.jpg")
             # return redirect(index)
             return authorize_42(request)
-        
+
         # access index from another page
         html_data = render_to_string('index.html')
         return JsonResponse({"success": True, "html_data": html_data})
@@ -142,3 +142,15 @@ def get_random_string(length=70):
     characters = string.ascii_letters + string.digits + "_"
     random_str = ''.join(random.choice(characters) for i in range(length))
     return random_str
+
+# TMP
+from django.utils import translation
+
+def set_language(request):
+    lang_code = request.GET.get('lang')
+    if lang_code and lang_code in ['en', 'fr', 'jp']:
+        request.session['lang'] = lang_code
+        translation.activate(lang_code)
+        request.session[translation.LANGUAGE_SESSION_KEY] = lang_code
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)

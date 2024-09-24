@@ -10,6 +10,13 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col">
+					<div class="language-selector">
+						<select id="language" onchange="changeLanguage(this.value)">
+							<option value="en">English</option>
+							<option value="fr">Français</option>
+							<option value="jp">日本語</option>
+						</select>
+					</div>
 					<div id="header-links" class="d-flex justify-content-start p-3">
 						{% if user.is_authenticated %}
 							{% include 'userinfos.html' %}
@@ -43,5 +50,6 @@
 		<script src="{% static 'profile.js' %}"></script>
 		<script src="{% static 'sidebar.js' %}"></script>
 		<script src="{% static 'index.js' %}"></script>
+		<script src="{% static 'languages.js' %}"></script>
     </body>
 </html>

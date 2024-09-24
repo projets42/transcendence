@@ -105,6 +105,8 @@ window.onload = function() {
 
 function toggleSignupModal() {
     $('#signupModal').modal('toggle');
+	const lang = document.getElementById('language').value;
+	changeLanguage(lang);
 }
 
 $(document).ready(function () {

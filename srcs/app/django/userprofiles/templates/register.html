@@ -17,25 +17,25 @@
                 <form id="registerForm" method="post" enctype="multipart/form-data" action="{% url 'userprofiles:register' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="id_username">Username</label>
+                        <label id="RegisterUsername" for="id_username">Username</label>
                         <input type="text" class="form-control" id="id_username" name="username" required>
                     </div>
                     <div class="form-group">
-                        <label for="id_password1">Password</label>
+                        <label id="RegisterPassword" for="id_password1">Password</label>
                         <input type="password" class="form-control" id="id_password1" name="password1" required>
-                        <small class="form-text text-muted">
+                        <small id="RegisterInstruction" class="form-text text-muted">
                             Your password must contain at least 8 characters, can't be too similar to your personal information, can't be a commonly used password, and can't be entirely numeric.
                         </small>
                     </div>
                     <div class="form-group">
-                        <label for="id_password2">Confirm Password</label>
+                        <label id="RegisterPasswordConf" for="id_password2">Confirm Password</label>
                         <input type="password" class="form-control" id="id_password2" name="password2" required>
                     </div>
                     <div class="form-group">
-                        <label for="id_picture">Profile Picture</label>
+                        <label id="RegisterPP" for="id_picture">Profile Picture</label>
                         <input type="file" class="form-control-file" id="id_picture" name="picture">
                     </div>
-                    <button type="submit" class="btn btn-primary custom-button btn-block">Sign Up</button>
+                    <button id="SignupBtn" type="submit" class="btn btn-primary custom-button btn-block">Sign Up</button>
                 </form>
             </div>
         </div>
@@ -43,7 +43,7 @@
 </div>
 
 <script>
-    /* Adds an event listener for the submit event of the form with the "registerForm" ID. 
+    /* Adds an event listener for the submit event of the form with the "registerForm" ID.
     This means that every time the form is submitted, this function is executed. */
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault(); /* Prevents the default behavior of form submission (page reload). */
@@ -85,5 +85,3 @@
     });
 
 </script>
-
-

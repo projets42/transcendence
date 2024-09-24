@@ -24,22 +24,22 @@
     <form method="POST" action="/profiles/request/">
         {% csrf_token %}
         <input style="display: none;" type="text" value="request" name="request">
-        <input class="neon-btn-play" type="submit" value="Friend requests ({{ friend_request }})">
+        <input id="friend-requests-btn" class="neon-btn-play" type="submit" value="Friend requests ({{ friend_request }})">
     </form>
 </div>
 
 <form method="post" class="neon-form">
     {% csrf_token %}
-    <input type="text" name="friend_name" placeholder="Enter username to add friend" required maxlength="15">
-    <input class="neon-btn-play" type="submit" value="Add Friend">
+    <input id="add-friend-placeholder" type="text" name="friend_name" placeholder="Enter username to add friend" required maxlength="15">
+    <input id="add-friend-btn" class="neon-btn-play" type="submit" value="Add Friend">
     <div id="error_messages"></div>
 </form>
 
-<h2 class="neon-text">Friends</h2>
+<h2 id="friends-title" class="neon-text">Friends</h2>
 
 <div class="friends-list">
     {% if not friends %}
-        <p>No friends yet</p>
+        <p id="no-friends-message">No friends yet</p>
     {% else %}
         <div class="row">
             {% for friend in friends %}
@@ -51,7 +51,7 @@
                             <form method="post" action="/profiles/friends/">
                                 {% csrf_token %}
                                 <input type="hidden" name="friend_id" value="{{ friend.id }}">
-                                <input class="friend_list neon-btn-play" type="submit" value="View Profile">
+                                <input id="view-profile-btn" class="friend_list neon-btn-play" type="submit" value="View Profile">
                             </form>
                         </p>
                     </div>
@@ -62,5 +62,5 @@
     {% endif %}
 </div>
 <div class="text-left mt-5">
-	<button id="btn-return" onclick="changePage('/')">Return</button>
+    <button id="btn-return" onclick="changePage('/')">Return</button>
 </div>

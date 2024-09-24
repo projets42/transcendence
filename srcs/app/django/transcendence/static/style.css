@@ -259,7 +259,7 @@ a:hover {
 
 /* This selector targets the <h3> elements inside the element with the sidebar ID. */
 #sidebar h3 {
-	font-size: 3rem;
+	font-size: 2.5rem;
 	color: var(--sidebar-neon-color);
 	text-shadow:
 		0 0 5px var(--sidebar-neon-color),
@@ -818,4 +818,33 @@ input[type="submit"]:hover {
 .game-list {
 	overflow-y: auto;
 	max-height: 390px;
+}
+
+/* LANGUAGES */
+.language-selector select {
+	background-color: transparent;
+	border: 2px solid #0ff;
+	border-radius: 5px;
+	padding: 5px 10px;
+	font-size: 16px;
+	color: #0ff;
+	text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f;
+	outline: none;
+	appearance: none;
+}
+
+.language-selector select option {
+	background-color: #000;
+	color: #fff;
+}
+
+.language-selector select:hover {
+	box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #00f, 0 0 20px #00f;
+}
+
+.language-selector {
+	position: fixed;
+	top: 25px;
+	right: 20px;
+	z-index: 1000;
 }

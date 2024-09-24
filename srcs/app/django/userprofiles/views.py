@@ -25,7 +25,8 @@ def register_user(request):
             img = ProfileImg(user=usr, picture=form.cleaned_data.get('picture'))
             img.save()
             Status.objects.create(user = usr)
-            messages.success(request, "Account created successfully!")
+            messages.success(request, "success_account_created")
+            # messages.success(request, "Account created successfully!")
             return JsonResponse({"success": True})
         else:
             """ Creation of a dictionary to store validation errors. """
@@ -255,7 +256,7 @@ def friends(request):
                 return JsonResponse({"success": False, "message": "User not found"})
             if username == request.user.username:
                 return JsonResponse({"success": False, "message": "Are you that desperate ?"})
-            
+
             friend = Friend.objects.all().filter(user = user[0], friend = request.user.id)
             friendship = Friend.objects.all().filter(user = request.user, friend = user[0].id)
             if friend | friendship:

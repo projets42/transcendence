@@ -52,7 +52,15 @@ function handleFormSubmit(event) {
 			document.getElementById('header-links').innerHTML = data.header_html;
 			document.getElementById('sidebar').innerHTML = data.sidebar_html;
 			document.getElementById('main-content').innerHTML = `<form method="get"><button id="play-button-active" type="button" onclick="changePage('/play/')">PLAY</button></form>`;
-            attachEventListeners();
+
+			const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+			const languageSelector = document.getElementById('language');
+			if (languageSelector) {
+				languageSelector.value = savedLanguage;
+			}
+			changeLanguage(savedLanguage);
+
+			attachEventListeners();
         } else {
 			messagesDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
 		}
@@ -71,6 +79,8 @@ function loadSidebar() {
     .then(data => {
         if (data.html) {
             document.getElementById('sidebar').innerHTML = data.html;
+			const lang = document.getElementById('language').value;
+    		changeLanguage(lang);
             attachEventListeners();
         } else {
             console.error('No HTML returned');
@@ -95,6 +105,13 @@ function logoutUser() {
             document.getElementById('main-content').innerHTML = `<input id="play-button" type="button" value="PLAY" onclick="toggleLoginForm()">`;
 
             hideLoginForm();
+
+			const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+			const languageSelector = document.getElementById('language');
+			if (languageSelector) {
+				languageSelector.value = savedLanguage;
+			}
+			changeLanguage(savedLanguage);
 
             attachEventListeners();
         }

@@ -1,29 +1,31 @@
 <div class="user-info">
-	<p>
-		{% if friend.profileimg.picture %}
-			<img src="{{ friend.profileimg.picture.url }}" width="100" height="100" class="profile-img"><br>
-		{% else %}
-			<img src="/media/images/default.png" width="100" height="100" class="profile-img"><br>
-		{% endif %}
-		<span class="neon-text">{{ friend.username }}</span><br>
-		{% if last_connection > 25 %}
-			OFFLINE
-		{% else %}
-			ONLINE
-		{% endif %}
-	</p>
+    <p>
+        {% if friend.profileimg.picture %}
+            <img src="{{ friend.profileimg.picture.url }}" width="100" height="100" class="profile-img"><br>
+        {% else %}
+            <img src="/media/images/default.png" width="100" height="100" class="profile-img"><br>
+        {% endif %}
+        <span id="friend-username" class="neon-text">{{ friend.username }}</span><br>
+        <span id="connection-status">
+            {% if last_connection > 25 %}
+                OFFLINE
+            {% else %}
+                ONLINE
+            {% endif %}
+        </span>
+    </p>
 
-	<div class="friend-stats">
-		<p>Pong games played: {{ games }}</p>
-		<p>Victories in pong game: {{ victories }}</p>
-		<p>Defeats in pong game: {{ defeats }}</p>
-		<p>Bomberman games played: {{ bbm_games }}</p>
-		<p>Victories in Bomberman game: {{ bbm_victories }}</p>
-		<p>Defeats in Bomberman game: {{ bbm_defeats }}</p>
-		<p>Draws in Bomberman game: {{ bbm_draws }}</p>
-	</div>
+    <div class="friend-stats">
+        <p id="pong-games-played">Pong games played: {{ games }}</p>
+        <p id="pong-victories">Victories in pong game: {{ victories }}</p>
+        <p id="pong-defeats">Defeats in pong game: {{ defeats }}</p>
+        <p id="bbm-games-played">Bomberman games played: {{ bbm_games }}</p>
+        <p id="bbm-victories">Victories in Bomberman game: {{ bbm_victories }}</p>
+        <p id="bbm-defeats">Defeats in Bomberman game: {{ bbm_defeats }}</p>
+        <p id="bbm-draws">Draws in Bomberman game: {{ bbm_draws }}</p>
+    </div>
 </div>
 
-<div class="text-left mb-2"></div>
+<div class="text-left mb-2">
     <button id="btn-return" onclick="changePage('/profiles/friends/')">Return</button>
 </div>

@@ -58,14 +58,7 @@
 </style>
 
 <div class="text-center mb-4">
-    <button class="btn-return" onclick="history.back()">Return</button>
-
-	<!-- TEST GAME GENERATOR -->
-	<form method="post">
-		{% csrf_token %}
-		<input type="text" value="test" name="test">
-		<input type="submit" value="Add">
-	</form>
+    <button id="btn-return" class="btn-return" onclick="history.back()">Return</button>
 </div>
 
 <div class="container">
@@ -83,10 +76,10 @@
         </p>
     </div>
 
-    <h2 class="text-center mb-4 neon-text">{{ game_name }} Game History</h2>
+    <h2 id="game-history-title" class="text-center mb-4 neon-text">{{ game_name }} Game History</h2>
 
     {% if not games %}
-        <div class="alert-info-custom">
+        <div id="no-games-found" class="alert-info-custom">
             No {{ title }} games found.
         </div>
     {% else %}
