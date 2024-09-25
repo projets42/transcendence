@@ -176,6 +176,14 @@ function nextTick(balls, fakeballs){
         drawPaddles();
         for(let i = 0; i < balls.length; i++)
         {
+            // check
+            if (gameIsFinished){
+                while (i < balls.length){
+                    drawBall[i];
+                    i++;
+                }
+                break;
+            }
             // check collision by step of size ballradius
             balls[i].step = Math.ceil(balls[i].speed / ballRadius);
             balls[i].xIncr = balls[i].xDirection / balls[i].step;
@@ -479,7 +487,7 @@ function updateScore(){
     {
         clearInterval(intervalID);
         gameIsFinished = true;
-        clearBoard();
+        // clearBoard();
         if (document.getElementById("winnerForm"))
         {
             setTimeout(() => {
@@ -500,7 +508,7 @@ function updateScore(){
         {
             if (nbrPlayers == "\"1v1\""){
                 setTimeout(() => {
-                    resetBtn.addEventListener("click", resetGame);
+                    // resetBtn.addEventListener("click", resetGame);
                     if (paddle1.score > paddle2.score)
                     {
                         document.getElementById("winner").value = "player1";
@@ -520,8 +528,8 @@ function updateScore(){
             {
                 resetBtn.addEventListener("click", reset4Players);
                 drawPaddles4Players();
+                resetBtn.style.display ="block";
             }
-            resetBtn.style.display ="block";
         }
         context.fillStyle = "tomato";
         context.font = "75px comic sans";
