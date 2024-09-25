@@ -186,10 +186,6 @@ def modify_userpicture(request):
 
 @login_required
 def pong_games(request):
-    """ TEST GAME GENERATOR """
-    if request.method == 'POST' and request.POST.get('test'):
-        Pong.objects.create(creator = request.user.id, winner = "Sam", loser = "Sio", loser_score = 0)
-
     user_id = request.user.id
     games = Pong.objects.all().filter(creator=user_id, local=True)
     context = {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games}
@@ -269,21 +265,17 @@ def friends(request):
             friend_id = request.POST["friend_id"]
             friend = User.objects.all().filter(id = friend_id)
             if friend:
-                games = Pong.objects.all().filter(Q(winner_id = friend_id) | Q(loser_id = friend_id)).count()
-                victories = Pong.objects.all().filter(winner_id = friend_id).count()
-                defeats = Pong.objects.all().filter(loser_id = friend_id).count()
-                bbm_games = Bomberman.objects.all().filter(Q(winner_id = friend_id) | Q(loser_id = friend_id)).count()
-                bbm_victories = Bomberman.objects.all().filter(winner_id = friend_id, winner_score = 1).count()
-                bbm_defeats = Bomberman.objects.all().filter(loser_id = friend_id, winner_score = 1).count()
-                bbm_draws = Bomberman.objects.all().filter(Q(winner_id = friend_id) | Q(loser = friend_id), winner_score = 0, loser_score = 0).count()
-
+                games = Pong.objects.all().filter(creator = friend_id, local = False).count()
+                local_games = Pong.objects.all().filter(creator = friend_id, local = True).count()
+                bbm_games = Bomberman.objects.all().filter(creator = friend_id).count()
+                
                 tz = pytz.timezone('UTC')
                 current_time = datetime.now()
                 current_time = tz.localize(current_time)
                 last_connection = friend[0].status.date
                 diff = current_time - last_connection
-
-                html_data = render_to_string('friend_profile.html', {"friend": friend[0], "last_connection": diff.seconds - 7200, "games": games, "victories": victories, "defeats": defeats, "bbm_games": bbm_games, "bbm_victories": bbm_victories, "bbm_defeats": bbm_defeats, "bbm_draws": bbm_draws})
+                
+                html_data = render_to_string('friend_profile.html', {"friend": friend[0], "last_connection": diff.seconds - 7200, "games": games, "local_games": local_games, "bbm_games": bbm_games})
                 return JsonResponse({"success": True, "html_data": html_data})
 
             return JsonResponse({"success": False, "message": "User profile cannot be accessed :("})
@@ -332,5 +324,3 @@ def show_friend_request(request):
 
     # method GET (url)
     return render(request, "full.html", {"page": "friend_request.html", "friend_request": usernames})
-
-
