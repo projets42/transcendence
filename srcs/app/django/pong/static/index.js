@@ -140,6 +140,8 @@ function gameInitPong(){
     player3Bot = document.getElementById('bot3').textContent;
     player4Bot = document.getElementById('bot4').textContent;
     ballNbr = document.getElementById('balls').textContent;
+    if (ballNbr == 1)
+        ballNbr = 300
     scoreToWin = document.getElementById('score').textContent;
 
 
@@ -176,10 +178,10 @@ function nextTick(balls, fakeballs){
         drawPaddles();
         for(let i = 0; i < balls.length; i++)
         {
-            // check
+            // check to stop early
             if (gameIsFinished){
                 while (i < balls.length){
-                    drawBall[i];
+                    drawBall(balls[i]);
                     i++;
                 }
                 break;
@@ -508,7 +510,6 @@ function updateScore(){
         {
             if (nbrPlayers == "\"1v1\""){
                 setTimeout(() => {
-                    // resetBtn.addEventListener("click", resetGame);
                     if (paddle1.score > paddle2.score)
                     {
                         document.getElementById("winner").value = "player1";
@@ -560,6 +561,14 @@ function nextTick4Players(balls, fakeballs){
         drawPaddles4Players();
         for(let i = 0; i < balls.length; i++)
         {
+            // check to stop early
+            if (gameIsFinished){
+                while (i < balls.length){
+                    drawBall(balls[i]);
+                    i++;
+                }
+                break;
+            }
             // check collision by step of size ballradius
             balls[i].step = Math.ceil(balls[i].speed / ballRadius);
             balls[i].xIncr = balls[i].xDirection / balls[i].step;
