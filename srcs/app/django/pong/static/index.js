@@ -121,6 +121,8 @@ function gameInitPong(){
     context = gameBoard.getContext("2d");
     scoreText = document.getElementById("scoreText");
     resetBtn = document.getElementById("resetBtn");
+    if (document.getElementById("btn-return"))
+        btnReturn = document.getElementById("btn-return")
     player1Btn = document.getElementById("player1Btn");
     player2Btn = document.getElementById("player2Btn");
     player3Btn = document.getElementById("player3Btn");
@@ -246,11 +248,13 @@ function movePaddles(balls, fakeballs){
     //update ball position every 1 second
     if (Date.now() - time >= ACTUALISATIONIA)
     {
+        //create ball simulation for IA
         fakeballs.length = 0;
         for (let i = 0; i < balls.length; i++)
         {
             let tempball = new Ball(0, 0, 0, 0, 0);
             tempball.setValues(balls[i].speed, balls[i].x, balls[i].y, balls[i].xDirection, balls[i].yDirection);
+            tempball.index = i;
             fakeballs.push(tempball);
             checkBallDestination(balls[i], fakeballs[i], paddleHeight);
         }
@@ -380,7 +384,6 @@ function movePaddlesIA(fakeballs, paddle)
     if (fakeballs.length == 0)
         return (movePaddleIaToSpawn(paddle));
     let targetball = fakeballs[0];
-    targetball.index = 0;
     for(let i = 1; i < fakeballs.length; i++)
     {
         // check priority ball
@@ -397,7 +400,6 @@ function movePaddlesIA(fakeballs, paddle)
         if ((paddle.y - fakeballs[i].y < 0) && (fakeballs[i].y > paddle.y + paddle.height) && ((fakeballs[i].y - paddle.y - paddle.height) / paddleSpeed > fakeballs[i].arrivalTime))
             continue;
         targetball = fakeballs[i];
-        targetball.index = i;
     }
 
 
@@ -487,40 +489,49 @@ function updateScore(){
     {
         clearInterval(intervalID);
         gameIsFinished = true;
-        // clearBoard();
         if (document.getElementById("winnerForm"))
         {
+            //hide exit button
+            if (document.getElementById('btn-return'))
+                btnReturn.style.display="none"
             setTimeout(() => {
-                if (paddle1.score > paddle2.score)
-                {
-                    document.getElementById("winner").value = "player1";
-                    document.getElementById("loserScore").value = paddle2.score;
-                }
-                else
-                {
-                    document.getElementById("winner").value = "player2";
-                    document.getElementById("loserScore").value = paddle1.score;
-                }
-                document.getElementById("result").click();
-            }, 1000);
-        }
-        else if (document.getElementById("winnerFormLocal"))
-        {
-            if (nbrPlayers == "\"1v1\""){
-                setTimeout(() => {
+                if (document.getElementById("winnerForm")){
                     if (paddle1.score > paddle2.score)
                     {
                         document.getElementById("winner").value = "player1";
-                        document.getElementById("winnerScore").value = paddle1.score;
                         document.getElementById("loserScore").value = paddle2.score;
                     }
                     else
                     {
                         document.getElementById("winner").value = "player2";
-                        document.getElementById("winnerScore").value = paddle2.score;
                         document.getElementById("loserScore").value = paddle1.score;
                     }
                     document.getElementById("result").click();
+                }
+            }, 1000);
+        }
+        else if (document.getElementById("winnerFormLocal"))
+        {
+            if (nbrPlayers == "\"1v1\""){
+                //hide exit button
+                if (document.getElementById('btn-return'))
+                    btnReturn.style.display="none"
+                setTimeout(() => {
+                    if (document.getElementById("winnerFormLocal")){
+                        if (paddle1.score > paddle2.score)
+                        {
+                            document.getElementById("winner").value = "player1";
+                            document.getElementById("winnerScore").value = paddle1.score;
+                            document.getElementById("loserScore").value = paddle2.score;
+                        }
+                        else
+                        {
+                            document.getElementById("winner").value = "player2";
+                            document.getElementById("winnerScore").value = paddle2.score;
+                            document.getElementById("loserScore").value = paddle1.score;
+                        }
+                        document.getElementById("result").click();
+                    }
                 }, 1000);
             }
             else if (nbrPlayers == "\"2v2\"")
@@ -609,6 +620,7 @@ function movePaddles4Players(balls, fakeballs){
         {
             let tempball = new Ball(0, 0, 0, 0, 0);
             tempball.setValues(balls[i].speed, balls[i].x, balls[i].y, balls[i].xDirection, balls[i].yDirection);
+            tempball.index = i;
             fakeballs.push(tempball);
             checkBallDestination(balls[i], fakeballs[i], paddleHeight4Players);
         }
@@ -715,7 +727,6 @@ function getTargetBalls(paddle, fakeballs, targetballs){
             continue;
         if ((paddle.y - fakeballs[i].y < 0) && (fakeballs[i].y > paddle.y + paddle.height) && ((fakeballs[i].y - paddle.y - paddle.height) / paddleSpeed > fakeballs[i].arrivalTime))
             continue;
-        fakeballs[i].index = i;
         ballAddAscendedSort(targetballs, fakeballs[i]);
     }
 }
@@ -841,7 +852,7 @@ function ballBouncePaddleRight(ball, currentBallSpeed, paddle){
 
 //reset functions
 function resetGame(){
-    //remove reset bouton
+    //remove reset button
     if (document.getElementById('resetBtn'))
     {
         resetBtn.removeEventListener("click", resetGame);
@@ -881,7 +892,7 @@ function resetGame(){
     gameStart(balls, fakeballs);
 };
 function reset4Players(){
-    //remove reset bouton
+    //remove reset button
     if (document.getElementById('resetBtn'))
     {
         resetBtn.removeEventListener("click", reset4Players);
