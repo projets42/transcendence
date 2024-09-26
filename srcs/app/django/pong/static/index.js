@@ -81,7 +81,6 @@ class Ball{
         this.xDirection = xDirection;
         this.yDirection = yDirection;
         this.arrivalTime = 0;
-        this.tics = 0;
         this.index = -1;
     }
     setValues(speed, x, y, xDirection, yDirection){
@@ -91,7 +90,6 @@ class Ball{
         this.xDirection = xDirection;
         this.yDirection = yDirection;
         this.arrivalTime = 0;
-        this.tics = 0;
         this.index = -1;
     }
 }
@@ -256,7 +254,7 @@ function movePaddles(balls, fakeballs){
             tempball.setValues(balls[i].speed, balls[i].x, balls[i].y, balls[i].xDirection, balls[i].yDirection);
             tempball.index = i;
             fakeballs.push(tempball);
-            checkBallDestination(balls[i], fakeballs[i], paddleHeight);
+            checkBallDestination(fakeballs[i], paddleHeight);
         }
         time = Date.now();
     }
@@ -266,20 +264,10 @@ function movePaddles(balls, fakeballs){
     if (player2Bot == "true")
         movePaddlesIA(fakeballs, paddle2);
 
-    //remove fakeballs that belongs to the past
-    for (let i = 0; i < fakeballs.length; i++)
-    {
-        if (fakeballs[0].tics <= 1)
-            fakeballs.shift();
-        else
-            break;
-    }
 
-    //decrease fakeballs arrivalTime and tics
-    for (let i = 0; i < fakeballs.length; i++){
+    //decrease fakeballs arrivalTime
+    for (let i = 0; i < fakeballs.length; i++)
         fakeballs[i].arrivalTime--;
-        fakeballs[i].tics;
-    }
 
 
     // move paddles
@@ -302,7 +290,7 @@ function movePaddles(balls, fakeballs){
         keys[paddle2down] = false;
     }
 };
-function checkBallDestination(ball, fakeball, currentpaddleheight)
+function checkBallDestination(fakeball, currentpaddleheight)
 {
     fakeball.check = false;
     let lastxDirection = fakeball.xDirection;
@@ -325,14 +313,11 @@ function checkBallDestination(ball, fakeball, currentpaddleheight)
     }
 
 
-    //compute tics to reach score zone and stock in fakeball.tics
-    fakeball.tics = fakeball.arrivalTime;
     while (fakeball.xDirection * lastxDirection >= 0)
     {
         if (fakeball.x <= 0 || fakeball.x >= gameWidth)
             fakeball.xDirection *= -1;
         fakeball.x += fakeball.xDirection;
-        fakeball.tics++;
     }
 
     
@@ -622,7 +607,7 @@ function movePaddles4Players(balls, fakeballs){
             tempball.setValues(balls[i].speed, balls[i].x, balls[i].y, balls[i].xDirection, balls[i].yDirection);
             tempball.index = i;
             fakeballs.push(tempball);
-            checkBallDestination(balls[i], fakeballs[i], paddleHeight4Players);
+            checkBallDestination(fakeballs[i], paddleHeight4Players);
         }
         time = Date.now();
     }
@@ -636,20 +621,10 @@ function movePaddles4Players(balls, fakeballs){
     if (player4Bot == "true")
         movePaddlesIA4Players(fakeballs, paddle4, paddle2, paddleSpawnBottom);
 
-    //remove fakeballs that belongs to the past
-    for (let i = 0; i < fakeballs.length; i++)
-        {
-            if (fakeballs[0].tics <= 1)
-                fakeballs.shift();
-            else
-                break;
-        }
     
-    //decrease fakeballs arrivalTime and tics
-    for (let i = 0; i < fakeballs.length; i++){
+    //decrease fakeballs arrivalTime
+    for (let i = 0; i < fakeballs.length; i++)
         fakeballs[i].arrivalTime--;
-        fakeballs[i].tics;
-    }
 
 
     movePaddles4PlayersInput(paddle1, paddle3, paddle1up, paddle1down);
