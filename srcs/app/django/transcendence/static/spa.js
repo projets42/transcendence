@@ -62,13 +62,13 @@ function changePage(page, formData=null, byArrow=false)
             if (document.getElementById("playersList"))
                 initPlayerInput();
             overloadSubmit();
+            initValues();
         }
         else if (messagesDiv)
         {
             messagesDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
         }
         loadGames();
-        initValues();
     })
     .catch(error => console.error('Error:', error));
 }

@@ -718,7 +718,7 @@ function gameEnd(n)
     setTimeout(() => {
         document.getElementById("winner").value = winner;
         document.getElementById("result").click();
-    }, 3000);
+    }, 1000);
 
     return true;
 }
