@@ -1,6 +1,5 @@
 {% load static %}
 
-<div id="error_messages"></div>
 <form method="post" action="/bomberman/" class="neon-form p-4 rounded shadow-lg position-relative">
 
     {% csrf_token %}
@@ -22,6 +21,8 @@
         <input class="plst neon-input" type="text" name="names" value="player1" required maxlength="15">
         <input class="plst neon-input" type="text" name="names" value="player2" required maxlength="15">
     </div>
+    
+    <div id="error_messages"></div>
 
 	<div class="text-center mt-4">
 		<input type="submit" value="PLAY" class="btn neon-btn neon-btn-play" onclick="submitSubscriptionForm()">
