@@ -59,7 +59,7 @@ def start_local_game(request):
         return JsonResponse({"success": True, "html_data": html_data})
 
     # METHOD GET (with url)
-    return render(request, "game_settings_full.html", {"score": score})
+    return render(request, "full.html", {"page": "game_settings.html", "score": score})
 
 
 @login_required
@@ -112,11 +112,11 @@ def start_tournament(request):
 
     # display subscription full html
     if PongTournament.objects.all().filter(creator = user_id).count() == 0:
-        return render(request, "pong_subscribe_full.html")
+        return render(request, "full.html", {"page": "pong_subscribe.html"})
 
     # players announcement full html
     games = PongTournament.objects.all().filter(creator = user_id, winner__isnull = True, player2__isnull = False)
-    return render(request, "pong_players_intro_full.html", {"p1": games[0].player1, "p2": games[0].player2})
+    return render(request, "full.html", {"page": "pong_players_intro.html", "p1": games[0].player1, "p2": games[0].player2})
 
 
 def create_tournament_tables(request, players):

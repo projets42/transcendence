@@ -35,7 +35,7 @@
 {{ color1 | json_script:"color1" }}
 {{ color2 | json_script:"color2" }}
 
-<form style="display: none;" method="post" action="/bomberman/">
+<form style="display: none;" method="post" action="{% url 'bomberman:game' %}">
     {% csrf_token %}
     <input type="text" id="winner" name="winner">
     <input type="submit" id="result" value="result">

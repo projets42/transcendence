@@ -60,11 +60,11 @@ def game(request):
 
     # display subscription full html
     if BombermanTournament.objects.all().filter(creator = user_id).count() == 0:
-        return render(request, "subscribe_full.html")
+        return render(request, "full.html", {"page": "subscribe.html"})
 
     # color selection full html
     games = BombermanTournament.objects.all().filter(creator = user_id, winner__isnull = True, player2__isnull = False)
-    return render(request, "players_intro_full.html", {"form": form, "p1": games[0].player1, "p2": games[0].player2})
+    return render(request, "full.html", {"page": "players_intro.html", "form": form, "p1": games[0].player1, "p2": games[0].player2})
 
 
 def create_tournament_tables(request, players):

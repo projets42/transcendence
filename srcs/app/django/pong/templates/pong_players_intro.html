@@ -1,6 +1,6 @@
 
 <div class="neon-form">
-    <form method="post" action="/pong/tournament/">
+    <form method="post" action="{% url 'pong:play_tournament' %}">
         {% csrf_token %}
         <p id="playersName" class="neon-title text-center">{{ p1 }} vs {{ p2 }}</p>
         <input style="display: none;" type="text" value="play" name="play">
@@ -9,7 +9,7 @@
 		</div>
     </form>
 
-	<form method="post" action="/pong/tournament/">
+	<form method="post" action="{% url 'pong:play_tournament' %}">
 		{% csrf_token %}
 		<input style="display: none;" type="text" value="cancel" name="cancel">
 		<button type="submit" value="Cancel" id="btn-return">CANCEL</button>

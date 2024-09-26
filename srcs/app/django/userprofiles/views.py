@@ -188,7 +188,7 @@ def modify_userpicture(request):
 def pong_games(request):
     user_id = request.user.id
     games = Pong.objects.all().filter(creator=user_id, local=True)
-    context = {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games}
+    context = {"page": "game_history.html", "game_name": "Pong", "title": "history", "games": games}
 
     if request.method == 'PUT':
         changeStatus(request)
@@ -196,14 +196,14 @@ def pong_games(request):
         html_data = render_to_string('game_history.html', context, request=request)
         return JsonResponse({"success": True, "html_data": html_data})
 
-    return render(request, "game_history_full.html", context)
+    return render(request, "full.html", context)
 
 
 @login_required
 def pong_tournaments(request):
     user_id = request.user.id
     games = Pong.objects.all().filter(creator=user_id, local=False)
-    context = {"page": "pong_games", "game_name": "Pong", "title": "history", "games": games}
+    context = {"page": "game_history.html", "game_name": "Pong", "title": "history", "games": games}
 
     if request.method == 'PUT':
         changeStatus(request)
@@ -211,7 +211,7 @@ def pong_tournaments(request):
         html_data = render_to_string('game_history.html', context, request=request)
         return JsonResponse({"success": True, "html_data": html_data})
 
-    return render(request, "game_history_full.html", context)
+    return render(request, "full.html", context)
 
 
 
@@ -219,7 +219,7 @@ def pong_tournaments(request):
 def bbm_games(request):
     user_id = request.user.id
     games = Bomberman.objects.all().filter(creator=user_id)
-    context = {"page": "bbm_games", "game_name": "Bomberman", "title": "history", "games": games}
+    context = {"page": "game_history.html", "game_name": "Bomberman", "title": "history", "games": games}
 
     if request.method == 'PUT':
         changeStatus(request)
@@ -227,7 +227,7 @@ def bbm_games(request):
         html_data = render_to_string('game_history.html', context, request=request)
         return JsonResponse({"success": True, "html_data": html_data})
 
-    return render(request, "game_history_full.html", context)
+    return render(request, "full.html", context)
 
 
 @login_required

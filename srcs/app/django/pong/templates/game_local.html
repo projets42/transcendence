@@ -36,7 +36,7 @@
 {{ score | json_script:"score" }}
 
 <!-- form for js to send winner name to python -->
-<form style="display: none;" id="winnerFormLocal" method="post" action="/pong/local/">
+<form style="display: none;" id="winnerFormLocal" method="post" action="{% url 'pong:play_local' %}">
     {% csrf_token %}
     <input type="text" id="winner" name="winner">
     <input type="number" id="winnerScore" name="winnerScore">

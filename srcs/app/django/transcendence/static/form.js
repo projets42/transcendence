@@ -1,3 +1,7 @@
+
+if (document.getElementById("playersList"))
+    initPlayerInput();
+
 function initPlayerInput()
 {
     maxPlayers = 10;

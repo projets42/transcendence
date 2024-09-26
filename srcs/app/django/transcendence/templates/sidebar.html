@@ -1,34 +1,30 @@
-<style>
-</style>
+{% if user.is_authenticated %}
+	{% include "./profile.html" %}
+{% else %}
+	<h3 id="login-title">LOG IN</h3>
+	<p><a class="back-link" onclick="hideLoginForm()">&lt;&lt; back</a></p>
 
+	<div id="error_messages"></div>
 
-	{% if user.is_authenticated %}
-		{% include "./profile.html" %}
-	{% else %}
-		<h3 id="login-title">LOG IN</h3>
-		<p><a class="back-link" onclick="hideLoginForm()">&lt;&lt; back</a></p>
-
-		<div id="error_messages"></div>
-
-		<form method="post" action="{% url 'userprofiles:login' %}">
-			{% csrf_token %}
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
-			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-			</div>
-			<button type="submit" class="btn btn-primary neon-button">Log In</button>
-		</form>
-		<div class="separator">
-			<span id="form_separator">- OR -</span>
+	<form method="post" action="{% url 'userprofiles:login' %}">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
 		</div>
-		<form id="auth42" method="post" class="text-center" action="/">
-			{% csrf_token %}
-			<input style="display: none;" type="text" name="auth" value="auth">
-			<button type="submit" class="btn btn-42auth">42 Auth</button>
-		</form>
-	{% endif %}
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+		</div>
+		<button type="submit" class="btn btn-primary neon-button">Log In</button>
+	</form>
+	<div class="separator">
+		<span id="form_separator">- OR -</span>
+	</div>
+	<form id="auth42" method="post" class="text-center" action="/">
+		{% csrf_token %}
+		<input style="display: none;" type="text" name="auth" value="auth">
+		<button type="submit" class="btn btn-42auth">42 Auth</button>
+	</form>
+{% endif %}
 

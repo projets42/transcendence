@@ -18,7 +18,7 @@
     }
 </style>
 
-<form method="post" action="/bomberman/" class="neon-form p-4 rounded shadow-lg position-relative">
+<form method="post" action="{% url 'bomberman:game' %}" class="neon-form p-4 rounded shadow-lg position-relative">
 
     {% csrf_token %}
 

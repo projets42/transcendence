@@ -93,8 +93,6 @@ def index(request):
 
         # authenticate with 42
         if request.POST.get('auth'):
-            # login_user_42(request, "smalloir", "https://cdn.intra.42.fr/users/3a0086ca405d47d215796a68c6eda55e/medium_smalloir.jpg")
-            # return redirect(index)
             return authorize_42(request)
         
         # access index from another page
@@ -116,7 +114,7 @@ def selection(request):
     if request.method != 'GET':
         html_data = render_to_string('selection.html')
         return JsonResponse({"success": True, "html_data": html_data})
-    return render(request, "selection_full.html")
+    return render(request, "full.html", {"page": "selection.html"})
 
 
 def changeStatus(request):

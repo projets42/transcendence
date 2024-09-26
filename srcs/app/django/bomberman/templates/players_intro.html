@@ -37,7 +37,7 @@
 </style>
 
 <div id="error_messages" class="text-danger"></div>
-<form method="post" action="/bomberman/" name="colorSelection" class="neon-form p-4 rounded shadow-lg position-relative">
+<form method="post" action="{% url 'bomberman:game' %}" name="colorSelection" class="neon-form p-4 rounded shadow-lg position-relative">
     {% csrf_token %}
 
     <h2 class="text-center neon-title">Color Selection</h2>
@@ -94,7 +94,7 @@
 </form>
 
 <div id="subcontent">
-    <form method="post" action="/bomberman/" class="neon-form p-4 rounded shadow-lg position-relative">
+    <form method="post" action="{% url 'bomberman:game' %}" class="neon-form p-4 rounded shadow-lg position-relative">
         {% csrf_token %}
         <input style="display: none;" type="text" value="cancel" name="cancel">
 		<button type="submit" value="Cancel" id="btn-return">CANCEL</button>

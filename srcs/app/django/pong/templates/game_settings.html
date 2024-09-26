@@ -1,7 +1,7 @@
 {% load static %}
 
 <div id="error_messages"></div>
-<form method="post" action="/pong/local/" class="neon-form p-4 rounded shadow-lg position-relative">
+<form method="post" action="{% url 'pong:play_local' %}" class="neon-form p-4 rounded shadow-lg position-relative">
 
     {% csrf_token %}
 

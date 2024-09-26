@@ -21,7 +21,7 @@
         {% endif %}
         <span class="neon-text">{{ user.username }}</span>
     </p>
-    <form method="POST" action="/profiles/request/">
+    <form method="POST" action="{% url 'userprofiles:friend_request' %}">
         {% csrf_token %}
         <input style="display: none;" type="text" value="request" name="request">
         <input class="neon-btn-play" type="submit" value="Friend requests ({{ friend_request }})">
@@ -48,7 +48,7 @@
                     <div class="card-body">
                         <h5 class="card-title {% cycle 'color-1' 'color-2' 'color-3' 'color-4' 'color-5' %}">{{ friend.username }}</h5>
                         <p>
-                            <form method="post" action="/profiles/friends/">
+                            <form method="post" action="{% url 'userprofiles:friends' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="friend_id" value="{{ friend.id }}">
                                 <input class="friend_list neon-btn-play" type="submit" value="View Profile">
