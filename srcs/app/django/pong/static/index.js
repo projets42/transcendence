@@ -140,8 +140,6 @@ function gameInitPong(){
     player3Bot = document.getElementById('bot3').textContent;
     player4Bot = document.getElementById('bot4').textContent;
     ballNbr = document.getElementById('balls').textContent;
-    if (ballNbr == 1)
-        ballNbr = 300
     scoreToWin = document.getElementById('score').textContent;
 
 
