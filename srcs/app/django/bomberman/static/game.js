@@ -716,8 +716,11 @@ function gameEnd(n)
     clearInterval(runGame);
 
     setTimeout(() => {
-        document.getElementById("winner").value = winner;
-        document.getElementById("result").click();
+        if (document.getElementById("result"))
+        {
+            document.getElementById("winner").value = winner;
+            document.getElementById("result").click();
+        }
     }, 1000);
 
     return true;
