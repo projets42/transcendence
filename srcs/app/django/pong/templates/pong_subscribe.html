@@ -1,5 +1,23 @@
 {% load static %}
 
+<style>
+    #playersList {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    input.plst {
+        width: 45%;
+        box-sizing: border-box;
+    }
+
+    input[type="text"] {
+        margin-bottom: 3px;
+    }
+</style>
+
 <form method="post" action="/pong/tournament/" class="neon-form p-4 rounded shadow-lg position-relative">
 
 	{% csrf_token %}
