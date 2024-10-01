@@ -9,6 +9,7 @@ services:
       - POSTGRES_DB=${SQL_DATABASE}
     networks:
       - transcendence
+    restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data/
 
@@ -24,7 +25,7 @@ services:
       - django
     networks:
       - transcendence
-    restart: on-failure
+    restart: always
     volumes:
       - static_volume:/var/lib/nginx/static
       - media_volume:/var/lib/nginx/media
@@ -39,7 +40,7 @@ services:
       - db
     networks:
       - transcendence
-    restart: on-failure
+    restart: always
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./app/django/:/usr/src/app/
