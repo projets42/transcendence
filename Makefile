@@ -8,7 +8,7 @@ build:
 
 up:
 	@echo "\033[34mLaunching configuration ${NAME}...\033[0m"
-	@docker compose -f ./srcs/docker-compose.yml up -d
+	@docker compose -f ./srcs/docker-compose.yml up && docker compose logs
 
 down:
 	@echo "\033[34mStopping configuration ${NAME}...\033[0m"
@@ -29,6 +29,6 @@ fclean: down
 
 re: down
 	@echo "\033[34mRebuilding configuration ${NAME}...\033[0m"
-	@docker compose -f ./srcs/docker-compose.yml up -d --build
+	@docker compose -f ./srcs/docker-compose.yml up --build
 
 .PHONY: all build down re clean fclean
